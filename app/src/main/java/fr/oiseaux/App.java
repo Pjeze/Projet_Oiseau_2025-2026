@@ -3,12 +3,25 @@
  */
 package fr.oiseaux;
 
-public class App {
-    public String getGreeting() {
-        return "Hello World!";
-    }
+import fr.oiseaux.model.SimpleModel;
+import fr.oiseaux.view.ControlPanel;
+import fr.oiseaux.view.MainWindow;
+import fr.oiseaux.view.SimulationPanel;
+import fr.oiseaux.controller.ModelController;
+import javax.swing.SwingUtilities;
 
-    public static void main(String[] args) {
-        System.out.println(new App().getGreeting());
-    }
+public class App {
+  public static void main(String[] args) {
+    SwingUtilities.invokeLater(() -> {
+      SimpleModel model = new SimpleModel();
+
+      SimulationPanel simPanel = new SimulationPanel(model);
+      ControlPanel ctrlPanel = new ControlPanel();
+      MainWindow window = new MainWindow(simPanel, ctrlPanel);
+
+      new ModelController(model, simPanel, ctrlPanel);
+
+      window.setVisible(true);
+    });
+  }
 }
