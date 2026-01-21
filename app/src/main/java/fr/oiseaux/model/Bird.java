@@ -1,18 +1,18 @@
 package fr.oiseaux.model;
 
 import java.awt.Image;
+import fr.oiseaux.model.Vector3D;
 
 public class Bird{
-  public double x, y;
-  public double velocityX, velocityY;
+  public Vector3D pos;
+  public Vector3D velocity;
   public int width, height;
   public Image img;
 
-  public Bird(double x, double y, int width, int height, Image img) {
-    this.x = x;
-    this.y = y;
+  public Bird(Vector3D pos, int width, int height, Image img) {
+    this.pos = pos;
     this.width = width;
     this.height = height;
     this.img = img;
-}
+  }
 }
