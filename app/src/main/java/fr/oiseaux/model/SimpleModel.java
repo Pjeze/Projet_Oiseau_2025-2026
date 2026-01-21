@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Random;
 import java.awt.Image;
 import javax.swing.ImageIcon;
-import fr.oiseaux.model.Vector3D;
 
 public class SimpleModel {
   private List<Bird> birds;
