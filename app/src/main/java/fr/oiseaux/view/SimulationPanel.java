@@ -32,6 +32,15 @@ public class SimulationPanel extends JPanel {
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
+    Graphics2D gp = (Graphics2D) g;
+
+    int drawableWidth = getWidth() - 2 * margin;
+    int drawableHeight = getHeight() - 2 * margin;
+
+    gp.setColor(Color.WHITE);
+    gp.fillRect(margin, margin, drawableWidth, drawableHeight);
+    gp.setColor(Color.BLACK);
+    gp.drawRect(margin, margin, drawableWidth, drawableHeight);
 
     if (model != null) {
       for (Bird b : model.getBirds()) {
@@ -39,30 +48,17 @@ public class SimulationPanel extends JPanel {
         int py = toScreenY(b.pos.y());
 
         if (b.img != null) {
-          int width = b.img.getWidth();
-          int height = b.img.getHeight();
+          AffineTransform originalTransform = gp.getTransform();
 
-          double orientationAngle = Math
-              .acos(b.velocity.y() / Math.sqrt(b.velocity.x() * b.velocity.x() + b.velocity.y() * b.velocity.y()));
-          int newWidth = (int) Math.abs(width * Math.cos(orientationAngle))
-              + (int) Math.abs(height * Math.sin(orientationAngle));
-          int newHeight = (int) Math.abs(height * Math.cos(orientationAngle))
-              + (int) Math.abs(width * Math.sin(orientationAngle));
+          double angle = Math.atan2(b.velocity.y(), b.velocity.x());
 
-          BufferedImage outputImage = new BufferedImage(newWidth, newHeight, b.img.getType());
+          gp.translate(px, py);
 
-          if (b.velocity.x() > 0)
-            orientationAngle = orientationAngle + Math.PI;
+          gp.rotate(angle);
 
-          AffineTransform transform = new AffineTransform();
-          transform.rotate(orientationAngle, newWidth / 2, newHeight / 2);
-          transform.translate((newWidth - width) / 2, (newHeight - height) / 2);
+          gp.drawImage(b.img, -b.width / 2, -b.height / 2, b.width, b.height, null);
 
-          Graphics2D g2d = outputImage.createGraphics();
-          g2d.setTransform(transform);
-
-          g2d.drawImage(b.img, px, py, b.width, b.height, null);
-          g2d.dispose();
+          gp.setTransform(originalTransform);
         } else {
           g.setColor(Color.RED);
           g.fillRect(px, py, b.width, b.height);
