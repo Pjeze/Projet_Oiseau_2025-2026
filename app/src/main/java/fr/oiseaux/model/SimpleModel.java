@@ -26,8 +26,7 @@ public class SimpleModel {
 
   private void initBirds() {
     while (birds.size() < birdNumber) {
-      Bird b = new Bird(new Vector3D(50, 50, 0), 50, 50, birdImg);
-      b.velocity = new Vector3D(2,2,2);
+      Bird b = new Bird(new Vector3D(50, 50, 0), new Vector3D(2, 2, 0), 50, 50, birdImg);
       birds.add(b);
     }
     while (birds.size() > birdNumber) {
