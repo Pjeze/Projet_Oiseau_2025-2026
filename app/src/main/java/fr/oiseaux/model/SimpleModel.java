@@ -12,8 +12,6 @@ public class SimpleModel {
   private Random random = new Random();
   private Image birdImg;
 
-  private double margin = 50;
-
   public SimpleModel() {
     birds = new ArrayList<>();
 
