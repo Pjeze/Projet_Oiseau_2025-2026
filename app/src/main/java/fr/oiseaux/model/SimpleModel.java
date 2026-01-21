@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Random;
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import fr.oiseaux.model.Vector3D;
 
 public class SimpleModel {
   private List<Bird> birds;
@@ -25,7 +26,8 @@ public class SimpleModel {
 
   private void initBirds() {
     while (birds.size() < birdNumber) {
-      Bird b = new Bird(50, 50, 50, 50, birdImg);
+      Bird b = new Bird(new Vector3D(50, 50, 0), 50, 50, birdImg);
+      b.velocity = new Vector3D(2,2,2);
       birds.add(b);
     }
     while (birds.size() > birdNumber) {
@@ -48,20 +50,20 @@ public class SimpleModel {
 
   public void updateMovement() {
     for (Bird b : birds) {
-      b.velocityX = (random.nextInt(6) - 3) / 5.0;
-      b.velocityY = (random.nextInt(6) - 3) / 5.0;
+      b.velocity.setX(((random.nextInt(6) - 3) / 5.0));
+      b.velocity.setY(((random.nextInt(6) - 3) / 5.0));
 
-      b.x += b.velocityX;
-      b.y += b.velocityY;
+      b.pos.add(b.velocity);
 
-      if (b.y > 100)
-        b.y -= 100;
-      if (b.y < 0)
-        b.y += 100;
-      if (b.x > 100)
-        b.x -= 100;
-      if (b.x < 0)
-        b.x += 100;
+      if (b.pos.y() > 100)
+        b.pos.setY(b.pos.y() - 100);
+      if (b.pos.y() < 0)
+        b.pos.setY(b.pos.y() + 100);
+      if (b.pos.x() > 100)
+        b.pos.setX(b.pos.x() - 100);
+      if (b.pos.x() < 0)
+        b.pos.setX(b.pos.x() + 100);
+
     }
   }
 }

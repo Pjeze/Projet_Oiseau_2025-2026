@@ -33,8 +33,8 @@ public class SimulationPanel extends JPanel {
 
     if (model != null) {
       for (Bird b : model.getBirds()) {
-        int px = toScreenX(b.x);
-        int py = toScreenY(b.y);
+        int px = toScreenX(b.pos.x());
+        int py = toScreenY(b.pos.y());
         if (b.img != null) {
           g.drawImage(b.img, px, py, b.width, b.height, null);
         } else {

@@ -23,6 +23,18 @@ public class Vector3D {
     return this.z;
   }
 
+  public void setX(double x) {
+    this.x = x;
+  }
+
+  public void setY(double y) {
+    this.y = y;
+  }
+
+  public void setZ(double z) {
+    this.z = z;
+  }
+
   public void add(Vector3D v) {
     this.x += v.x();
     this.y += v.y();
