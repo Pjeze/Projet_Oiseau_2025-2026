@@ -1,18 +1,18 @@
 package fr.oiseaux.controller;
 
-import fr.oiseaux.model.SimpleModel;
+import fr.oiseaux.model.VicsekModel;
 import fr.oiseaux.view.ControlPanel;
 import fr.oiseaux.view.SimulationPanel;
 import javax.swing.Timer;
 import java.awt.event.ActionEvent;
 
 public class ModelController {
-  private SimpleModel model;
+  private VicsekModel model;
   private SimulationPanel viewSim;
   private ControlPanel viewCtrl;
   private Timer timer;
 
-  public ModelController(SimpleModel model, SimulationPanel viewSim, ControlPanel viewCtrl) {
+  public ModelController(VicsekModel model, SimulationPanel viewSim, ControlPanel viewCtrl) {
     this.model = model;
     this.viewSim = viewSim;
     this.viewCtrl = viewCtrl;
@@ -38,7 +38,7 @@ public class ModelController {
   }
 
   private void startModelLoop() {
-    timer = new Timer(1000 / 10, (ActionEvent e) -> {
+    timer = new Timer(100, (ActionEvent e) -> {
       model.updateMovement();
       viewSim.repaint();
     });

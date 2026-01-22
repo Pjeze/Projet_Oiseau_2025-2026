@@ -9,11 +9,12 @@ import fr.oiseaux.view.MainWindow;
 import fr.oiseaux.view.SimulationPanel;
 import fr.oiseaux.controller.ModelController;
 import javax.swing.SwingUtilities;
+import fr.oiseaux.model.VicsekModel;
 
 public class App {
   public static void main(String[] args) {
     SwingUtilities.invokeLater(() -> {
-      SimpleModel model = new SimpleModel();
+      VicsekModel model = new VicsekModel(5, 0.2, 0.5);
 
       SimulationPanel simPanel = new SimulationPanel(model);
       ControlPanel ctrlPanel = new ControlPanel();

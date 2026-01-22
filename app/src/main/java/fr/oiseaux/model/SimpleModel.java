@@ -53,7 +53,7 @@ public class SimpleModel {
       b.velocity.setX(((random.nextInt(6) - 3) / 5.0));
       b.velocity.setY(((random.nextInt(6) - 3) / 5.0));
 
-      b.pos.add(b.velocity);
+      b.pos = Vector3D.add(b.pos, b.velocity);
 
       if (b.pos.y() > 100)
         b.pos.setY(b.pos.y() - 100);
