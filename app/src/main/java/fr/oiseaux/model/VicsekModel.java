@@ -36,9 +36,9 @@ public class VicsekModel {
 
   private void initBirds() {
     while (birds.size() < birdNumber) {
-      double vx = random.nextDouble() * v0;
+      Vector3D v = new Vector3D(random.nextDouble()-0.5,random.nextDouble()-0.5, 0);
       Bird b = new Bird(new Vector3D(random.nextInt(100), random.nextInt(100), 0),
-          new Vector3D(vx, Math.sqrt(v0 * v0 - vx * vx), 0), 50, 50, birdImg);
+          v.normalize().scale(v0), 50, 50, birdImg);
       birds.add(b);
     }
     while (birds.size() > birdNumber) {
@@ -79,7 +79,9 @@ public class VicsekModel {
           vSum = Vector3D.add(vSum, c.velocity);
         }
       }
-      Vector3D newVelocity = vSum.normalize().scale(v0);
+      double randomAngle = random.nextDouble() * 2 * Math.PI;
+      Vector3D randomNoise = new Vector3D(Math.cos(randomAngle), Math.sin(randomAngle), 0);
+      Vector3D newVelocity = Vector3D.add(vSum.normalize().scale(v0), randomNoise.scale(eta));
       tabVelocities.add(newVelocity);
       b.pos = Vector3D.add(b.pos, newVelocity);
       if (b.pos.x() > 100)
