@@ -38,7 +38,7 @@ public class ModelController {
   }
 
   private void startModelLoop() {
-    timer = new Timer(100, (ActionEvent e) -> {
+    timer = new Timer(1000/60, (ActionEvent e) -> {
       model.updateMovement();
       viewSim.repaint();
     });
