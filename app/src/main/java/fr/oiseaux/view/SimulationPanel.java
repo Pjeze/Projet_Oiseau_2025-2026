@@ -9,15 +9,15 @@ import java.awt.image.BufferedImage;
 import javax.swing.JPanel;
 
 import fr.oiseaux.model.Bird;
-import fr.oiseaux.model.SimpleModel;
+import fr.oiseaux.model.VicsekModel;
 
 public class SimulationPanel extends JPanel {
-  private SimpleModel model;
+  private VicsekModel model;
 
   double xMin = 0, xMax = 100, yMin = 0, yMax = 100;
   int margin = 50;
 
-  public SimulationPanel(SimpleModel model) {
+  public SimulationPanel(VicsekModel model) {
     this.model = model;
   }
 
