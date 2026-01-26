@@ -79,9 +79,12 @@ public class VicsekModel {
           vSum = Vector3D.add(vSum, c.velocity);
         }
       }
-      double randomAngle = random.nextDouble() * 2 * Math.PI;
-      Vector3D randomNoise = new Vector3D(Math.cos(randomAngle), Math.sin(randomAngle), 0);
-      Vector3D newVelocity = Vector3D.add(vSum.normalize().scale(v0), randomNoise.scale(eta));
+      Vector3D randomNoise = new Vector3D((random.nextDouble()-0.5)*2, (random.nextDouble()-0.5)*2, 0);
+      while (randomNoise.norm2() > 1.0) {
+          randomNoise = new Vector3D((random.nextDouble()-0.5)*2, (random.nextDouble()-0.5)*2, 0);
+      }
+      randomNoise = randomNoise.normalize();
+      Vector3D newVelocity = Vector3D.add(vSum, randomNoise.scale(eta)).normalize().scale(v0);
       tabVelocities.add(newVelocity);
       b.pos = Vector3D.add(b.pos, newVelocity);
       if (b.pos.x() > 100)
