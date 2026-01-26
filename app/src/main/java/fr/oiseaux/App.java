@@ -14,7 +14,7 @@ import fr.oiseaux.model.VicsekModel;
 public class App {
   public static void main(String[] args) {
     SwingUtilities.invokeLater(() -> {
-      VicsekModel model = new VicsekModel(5, 0.1, 0.5);
+      VicsekModel model = new VicsekModel(8, 0.0001, 0.23);
 
       SimulationPanel simPanel = new SimulationPanel(model);
       ControlPanel ctrlPanel = new ControlPanel();
