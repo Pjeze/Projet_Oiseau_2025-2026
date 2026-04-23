@@ -1,10 +1,11 @@
 package fr.oiseaux.view;
 
 import java.awt.Color;
+import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.Toolkit;
 import java.awt.geom.AffineTransform;
-import java.awt.image.BufferedImage;
 
 import javax.swing.JPanel;
 
@@ -14,11 +15,22 @@ import fr.oiseaux.model.VicsekModel;
 public class SimulationPanel extends JPanel {
   private VicsekModel model;
 
+  //Dimension
+  //main window
+  Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+  int screenWidth = (int) screenSize.getWidth();
+  int screenHeight = (int) screenSize.getHeight();
+
+  //simBoard
+  int simWidth = (int) (4*screenWidth/5);
+  int simHeight = (int) (screenHeight*0.9);
+
   double xMin = 0, xMax = 100, yMin = 0, yMax = 100;
   int margin = 50;
 
   public SimulationPanel(VicsekModel model) {
     this.model = model;
+    setSize(simWidth, simHeight);
   }
 
   int toScreenX(double x) {
