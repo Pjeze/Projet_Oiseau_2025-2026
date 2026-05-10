@@ -104,7 +104,7 @@ public class ModelController {
 
       if (!source.getValueIsAdjusting()) {
         double val = this.viewVicsekCtrl.speedSlider.getValue();
-        model.setSpeed(val);
+        model.setSpeed(val/100);
         this.viewVicsekViewParam.updateVicsekSpeed(model.getSpeed());
         viewSim.repaint();
       }
