@@ -38,10 +38,16 @@ public class ControlPanel extends JPanel {
           JPanel changeTitlePanel = new JPanel();
           JLabel changeTitleLabel = new JLabel("Change Birds characteristics");
 
-          //birdNumber panel
-          JPanel birdNumberPanel = new JPanel();
-          JLabel birdNumberLabel = new JLabel("Enter bird number : ");
-          public JFormattedTextField birdNumberField = new JFormattedTextField(NumberFormat.getIntegerInstance());
+          //core changement panel
+          JPanel coreChangementPanel = new JPanel();
+
+            //birdNumber panel
+            JPanel birdNumberPanel = new JPanel();
+            JLabel birdNumberLabel = new JLabel("Enter bird number : ");
+            public JFormattedTextField birdNumberField = new JFormattedTextField(NumberFormat.getIntegerInstance());
+
+            //vicsekParameter panel
+            vicsekControlPanel vicsekParameterPanel;
 
       //characteristics panel
       JPanel characteristicsPanel = new JPanel();
@@ -50,9 +56,15 @@ public class ControlPanel extends JPanel {
         JPanel charTitlePanel = new JPanel();
         JLabel charTitleLabel = new JLabel("Birds Characteristics");
 
-        //characteristics bird number panel
-        JPanel charBirdNumberPanel = new JPanel();
-        JLabel charBirdNumberLabel = new JLabel("");
+        //core characteristics panel
+        JPanel coreCharacteristicsPanel = new JPanel();
+
+          //characteristics bird number panel
+          JPanel charBirdNumberPanel = new JPanel();
+          JLabel charBirdNumberLabel = new JLabel("");
+
+          //Model Panel
+          VicsekViewParamPanel viewVicsekViewParamPanel;
 
   //submit pannel
   JPanel submitPanel = new JPanel();
@@ -80,12 +92,20 @@ public class ControlPanel extends JPanel {
             changeTitlePanel.add(changeTitleLabel);
             changementPanel.add(changeTitlePanel, BorderLayout.NORTH);
 
-            //birdNumber panel
-            //bird number text field
-            birdNumberField.setColumns(4);
-            birdNumberPanel.add(birdNumberLabel);
-            birdNumberPanel.add(birdNumberField);
-            changementPanel.add(birdNumberPanel, BorderLayout.CENTER);
+            //core changement panel
+            coreChangementPanel.setLayout(new BorderLayout());
+
+              //birdNumber panel
+              birdNumberField.setColumns(4);
+              birdNumberPanel.add(birdNumberLabel);
+              birdNumberPanel.add(birdNumberField);
+              coreChangementPanel.add(birdNumberPanel, BorderLayout.NORTH);
+
+              //vicsekParameter panel
+              vicsekParameterPanel = new vicsekControlPanel();
+              coreChangementPanel.add(vicsekParameterPanel, BorderLayout.CENTER);
+
+            changementPanel.add(coreChangementPanel);
 
         corePanel.add(changementPanel);
 
@@ -98,10 +118,21 @@ public class ControlPanel extends JPanel {
             charTitlePanel.add(charTitleLabel);
             characteristicsPanel.add(charTitlePanel, BorderLayout.NORTH);
 
-            //characteristics bird number panel
-            charBirdNumberLabel.setText("Bird number: " + 5);
-            charBirdNumberPanel.add(charBirdNumberLabel);
-            characteristicsPanel.add(charBirdNumberPanel, BorderLayout.CENTER);
+            //core characteristics Panel
+            coreCharacteristicsPanel.setLayout(new GridLayout(2, 1));
+
+              //characteristics bird number panel
+              charBirdNumberLabel.setText("Bird number: " + 5);
+              charBirdNumberPanel.add(charBirdNumberLabel);
+              coreCharacteristicsPanel.add(charBirdNumberPanel);
+
+              //Model Panel
+              viewVicsekViewParamPanel = new VicsekViewParamPanel();
+              viewVicsekViewParamPanel.setControlPanel(this);
+              coreCharacteristicsPanel.add(viewVicsekViewParamPanel);
+            
+            characteristicsPanel.add(coreCharacteristicsPanel, BorderLayout.CENTER);
+
 
         corePanel.add(characteristicsPanel);
 
@@ -116,7 +147,16 @@ public class ControlPanel extends JPanel {
     
   }
 
-  public void updateInfo(int count) {
-    charBirdNumberLabel.setText("Bird number: " + count);
+  //getter for child panel
+  public VicsekViewParamPanel getVicsekViewParamPanel() {
+      return viewVicsekViewParamPanel;
+  }
+  public vicsekControlPanel getVicsekControlPanel() {
+      return vicsekParameterPanel;
+  }
+
+  //update
+  public void updateBirdNumber(int count) {
+    charBirdNumberLabel.setText("Bird number : " + count);
   }
 }

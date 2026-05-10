@@ -1,17 +1,15 @@
 package fr.oiseaux.model;
 
-import fr.oiseaux.model.Vector3D;
-import fr.oiseaux.model.Bird;
 import java.awt.image.BufferedImage;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.awt.image.BufferedImage;
+
 import javax.imageio.ImageIO;
-import java.net.URL;
 
 public class VicsekModel {
-  public double r;
+  public double radius;
   public double eta;
   public double v0;
   private int birdNumber = 5;
@@ -20,7 +18,7 @@ public class VicsekModel {
   private Random random = new Random();
 
   public VicsekModel(double r, double eta, double v0) {
-    this.r = r;
+    this.radius = r;
     this.eta = eta;
     this.v0 = v0;
     birds = new ArrayList<>();
@@ -46,6 +44,7 @@ public class VicsekModel {
     }
   }
 
+  //setter and getter for bird
   public int getBirdNumber() {
     return this.birdNumber;
   }
@@ -57,6 +56,33 @@ public class VicsekModel {
   public void setBirdNumber(int n) {
     this.birdNumber = n;
     initBirds();
+  }
+
+  //setter and getter for radius
+  public void setRadius(double n) {
+    this.radius = n;
+  }
+
+  public double getRadius() {
+    return this.radius;
+  }
+
+  //setter and getter for eta
+  public void setEta(double n) {
+    this.eta = n;
+  }
+
+  public double getEta() {
+    return this.eta;
+  }
+
+  //setter and getter for speed
+  public void setSpeed(double n) {
+    this.v0 = n;
+  }
+
+  public double getSpeed() {
+    return this.v0;
   }
 
   public void updateMovement() {
@@ -75,7 +101,7 @@ public class VicsekModel {
         if (diff.y() < -50)
           diff.setY(diff.y() + 100);
 
-        if (diff.norm2() <= r * r) {
+        if (diff.norm2() <= radius * radius) {
           vSum = Vector3D.add(vSum, c.velocity);
         }
       }
