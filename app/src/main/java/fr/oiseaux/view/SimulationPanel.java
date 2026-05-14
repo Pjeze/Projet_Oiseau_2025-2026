@@ -10,10 +10,12 @@ import java.awt.geom.AffineTransform;
 import javax.swing.JPanel;
 
 import fr.oiseaux.model.Bird;
+import fr.oiseaux.model.BirdModel;
 import fr.oiseaux.model.VicsekModel;
 
 public class SimulationPanel extends JPanel {
-  private VicsekModel model;
+  //Model
+  private BirdModel model;
 
   //Dimension
   //main window
@@ -28,11 +30,16 @@ public class SimulationPanel extends JPanel {
   double xMin = 0, xMax = 100, yMin = 0, yMax = 100;
   int margin = 50;
 
-  public SimulationPanel(VicsekModel model) {
-    this.model = model;
+  public SimulationPanel() {
     setSize(simWidth, simHeight);
   }
 
+
+  public void setModel(BirdModel mdl) {
+    this.model = mdl;
+  }
+
+  
   int toScreenX(double x) {
     return margin + (int) ((x - xMin) / (xMax - xMin) * (getWidth() - 2 * margin));
   }
@@ -54,7 +61,29 @@ public class SimulationPanel extends JPanel {
     gp.setColor(Color.BLACK);
     gp.drawRect(margin, margin, drawableWidth, drawableHeight);
 
-    if (model != null) {
+    if (this.model instanceof VicsekModel) {
+      for (Bird b : model.getBirds()) {
+        int px = toScreenX(b.pos.x());
+        int py = toScreenY(b.pos.y());
+
+        if (b.img != null) {
+          AffineTransform originalTransform = gp.getTransform();
+
+          double angle = Math.atan2(b.velocity.y(), b.velocity.x());
+
+          gp.translate(px, py);
+
+          gp.rotate(angle);
+
+          gp.drawImage(b.img, -b.width / 2, -b.height / 2, b.width, b.height, null);
+
+          gp.setTransform(originalTransform);
+        } else {
+          g.setColor(Color.RED);
+          g.fillRect(px, py, b.width, b.height);
+        }
+      }
+    } else {
       for (Bird b : model.getBirds()) {
         int px = toScreenX(b.pos.x());
         int py = toScreenY(b.pos.y());

@@ -8,7 +8,7 @@ import java.util.Random;
 
 import javax.imageio.ImageIO;
 
-public class VicsekModel {
+public class VicsekModel implements BirdModel {
   public double radius;
   public double eta;
   public double v0;
@@ -45,14 +45,17 @@ public class VicsekModel {
   }
 
   //setter and getter for bird
+  @Override
   public int getBirdNumber() {
     return this.birdNumber;
   }
 
+  @Override
   public List<Bird> getBirds() {
     return this.birds;
   }
 
+  @Override
   public void setBirdNumber(int n) {
     this.birdNumber = n;
     initBirds();
@@ -85,6 +88,7 @@ public class VicsekModel {
     return this.v0;
   }
 
+  @Override
   public void updateMovement() {
     List<Vector3D> tabVelocities = new ArrayList<>(birds.size());
     for (Bird b : birds) {

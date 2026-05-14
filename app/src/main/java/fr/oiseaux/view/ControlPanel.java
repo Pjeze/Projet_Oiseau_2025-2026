@@ -13,7 +13,12 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import fr.oiseaux.model.BirdModel;
+import fr.oiseaux.model.VicsekModel;
+
 public class ControlPanel extends JPanel {
+  //model
+  private BirdModel model;
 
   //Dimension
   //main window
@@ -139,6 +144,14 @@ public class ControlPanel extends JPanel {
     //submit panel
     submitPanel.add(submitButton);
 
+    //model visibility
+    if (this.model instanceof VicsekModel) {
+      vicsekParameterPanel.setVisible(true);
+      viewVicsekViewParamPanel.setVisible(true);
+    } else {
+      vicsekParameterPanel.setVisible(false);
+      viewVicsekViewParamPanel.setVisible(false);
+    }
     //add to the board
     setLayout(new BorderLayout());
     add(titlePanel, BorderLayout.NORTH);
@@ -147,12 +160,27 @@ public class ControlPanel extends JPanel {
     
   }
 
+  //setter for model
+  public void setModel(BirdModel mdl) {
+    this.model = mdl;
+  }
+
+  public void updateControlPanel(int modelType) {
+    if (this.model instanceof VicsekModel) {
+      vicsekParameterPanel.setVisible(true);
+      viewVicsekViewParamPanel.setVisible(true);
+    } else {
+      vicsekParameterPanel.setVisible(false);
+      viewVicsekViewParamPanel.setVisible(false);
+    }
+  }
+
   //getter for child panel
   public VicsekViewParamPanel getVicsekViewParamPanel() {
-      return viewVicsekViewParamPanel;
+      return this.viewVicsekViewParamPanel;
   }
   public vicsekControlPanel getVicsekControlPanel() {
-      return vicsekParameterPanel;
+      return this.vicsekParameterPanel;
   }
 
   //update

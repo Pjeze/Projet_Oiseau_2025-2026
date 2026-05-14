@@ -7,6 +7,9 @@ import java.awt.Toolkit;
 import javax.swing.JFrame;
 
 public class MainWindow extends JFrame {
+
+  MenuMainWindow menuWindow = new MenuMainWindow();
+
   public MainWindow(SimulationPanel simPanel, ControlPanel ctrlPanel) {
     
     //Dimension
@@ -21,11 +24,17 @@ public class MainWindow extends JFrame {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setLayout(new BorderLayout());
 
+    setMenuBar(menuWindow);
+
     add(ctrlPanel, BorderLayout.WEST);
     add(simPanel, BorderLayout.CENTER);
 
     getRootPane().setDefaultButton(ctrlPanel.submitButton);
     //pack();
     setLocationRelativeTo(null);
+  }
+
+  public MenuMainWindow getMenuWindow() {
+    return this.menuWindow;
   }
 }

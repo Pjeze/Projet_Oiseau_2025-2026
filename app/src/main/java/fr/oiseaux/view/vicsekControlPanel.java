@@ -23,7 +23,7 @@ public class vicsekControlPanel extends JPanel {
     //Visual field radius panel
     JPanel radiusPanel = new JPanel(new GridLayout(2, 1));
     JLabel radiusLabel = new JLabel("Visual field radius :");
-    public JSlider radiusSlider = new JSlider(JSlider.HORIZONTAL, 1,21, 8);
+    public JSlider radiusSlider = new JSlider(JSlider.HORIZONTAL, 0,20, 8);
 
     //eta (Interference) panel 
     JPanel etaPanel = new JPanel(new GridLayout(2, 1));

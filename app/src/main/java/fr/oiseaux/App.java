@@ -6,23 +6,23 @@ package fr.oiseaux;
 import javax.swing.SwingUtilities;
 
 import fr.oiseaux.controller.ModelController;
+import fr.oiseaux.model.BoidsModel;
 import fr.oiseaux.model.VicsekModel;
 import fr.oiseaux.view.ControlPanel;
 import fr.oiseaux.view.MainWindow;
 import fr.oiseaux.view.SimulationPanel;
-import fr.oiseaux.view.vicsekControlPanel;
 
 public class App {
   public static void main(String[] args) {
     SwingUtilities.invokeLater(() -> {
-      VicsekModel model = new VicsekModel(8, 0.0001, 0.23);
+      VicsekModel vicsekModel = new VicsekModel(8, 0.0001, 0.23);
+      BoidsModel boidsModel = new BoidsModel(8, 0.0001, 0.23);
 
-      SimulationPanel simPanel = new SimulationPanel(model);
+      SimulationPanel simPanel = new SimulationPanel();
       ControlPanel ctrlPanel = new ControlPanel();
       MainWindow window = new MainWindow(simPanel, ctrlPanel);
-      vicsekControlPanel vicCtrlPanel = new vicsekControlPanel();
 
-      new ModelController(model, simPanel, ctrlPanel, vicCtrlPanel);
+      new ModelController(vicsekModel, boidsModel, window, simPanel, ctrlPanel);
 
       window.setVisible(true);
     });
