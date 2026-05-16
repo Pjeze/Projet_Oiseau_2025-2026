@@ -1,19 +1,14 @@
 package fr.oiseaux.model;
 
-import java.awt.image.BufferedImage;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import javax.imageio.ImageIO;
 
 public class VicsekModel implements BirdModel {
   public double radius;
   public double eta;
   public double v0;
   private int birdNumber = 5;
-  private BufferedImage birdImg;
   private List<Bird> birds;
   private Random random = new Random();
 
@@ -23,12 +18,6 @@ public class VicsekModel implements BirdModel {
     this.v0 = v0;
     birds = new ArrayList<>();
 
-    try {
-      URL imageURL = this.getClass().getResource("/fr/oiseaux/724954.png");
-      this.birdImg = ImageIO.read(imageURL);
-    } catch (Exception var2) {
-      System.err.println("Image introuvable");
-    }
     initBirds();
   }
 
@@ -36,7 +25,8 @@ public class VicsekModel implements BirdModel {
     while (birds.size() < birdNumber) {
       Vector3D v = new Vector3D(random.nextDouble()-0.5,random.nextDouble()-0.5, 0);
       Bird b = new Bird(new Vector3D(random.nextInt(100), random.nextInt(100), 0),
-          v.normalize().scale(v0), 50, 50, birdImg);
+          v.normalize().scale(v0)
+        );
       birds.add(b);
     }
     while (birds.size() > birdNumber) {
@@ -62,31 +52,16 @@ public class VicsekModel implements BirdModel {
   }
 
   //setter and getter for radius
-  public void setRadius(double n) {
-    this.radius = n;
-  }
-
-  public double getRadius() {
-    return this.radius;
-  }
+  public void setRadius(double n) { this.radius = n; }
+  public double getRadius() { return this.radius; }
 
   //setter and getter for eta
-  public void setEta(double n) {
-    this.eta = n;
-  }
-
-  public double getEta() {
-    return this.eta;
-  }
+  public void setEta(double n) { this.eta = n; }
+  public double getEta() { return this.eta; }
 
   //setter and getter for speed
-  public void setSpeed(double n) {
-    this.v0 = n;
-  }
-
-  public double getSpeed() {
-    return this.v0;
-  }
+  public void setSpeed(double n) { this.v0 = n; }
+  public double getSpeed() { return this.v0; }
 
   @Override
   public void updateMovement() {

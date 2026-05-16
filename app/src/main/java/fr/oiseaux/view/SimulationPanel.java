@@ -11,7 +11,6 @@ import javax.swing.JPanel;
 
 import fr.oiseaux.model.Bird;
 import fr.oiseaux.model.BirdModel;
-import fr.oiseaux.model.VicsekModel;
 
 public class SimulationPanel extends JPanel {
   //Model
@@ -48,6 +47,32 @@ public class SimulationPanel extends JPanel {
     return margin + (int) ((y - yMin) / (yMax - yMin) * (getHeight() - 2 * margin));
   }
 
+  private void drawBird (Graphics2D g2d, Bird b) {
+    int px = toScreenX(b.pos.x());
+    int py = toScreenY(b.pos.y());
+    Color color = Color.GREEN;
+
+    int length = (getWidth() - 2 * margin) / 100;
+    int width  = length / 2;                       
+
+    int[] xPoints = {  length,  -length/2, -length/2 };
+    int[] yPoints = {  0,       -width,     width     };
+
+    AffineTransform originalTransform = g2d.getTransform();
+
+    double angle = Math.atan2(b.velocity.y(), b.velocity.x());
+    g2d.translate(px, py);
+    g2d.rotate(angle);
+
+    g2d.setColor(color);
+    g2d.fillPolygon(xPoints, yPoints, 3);
+    g2d.setColor(color.darker());
+    g2d.drawPolygon(xPoints, yPoints, 3); // outline
+
+    g2d.setTransform(originalTransform);
+  }
+
+
   @Override
   protected void paintComponent(Graphics g) {
     super.paintComponent(g);
@@ -61,49 +86,9 @@ public class SimulationPanel extends JPanel {
     gp.setColor(Color.BLACK);
     gp.drawRect(margin, margin, drawableWidth, drawableHeight);
 
-    if (this.model instanceof VicsekModel) {
-      for (Bird b : model.getBirds()) {
-        int px = toScreenX(b.pos.x());
-        int py = toScreenY(b.pos.y());
-
-        if (b.img != null) {
-          AffineTransform originalTransform = gp.getTransform();
-
-          double angle = Math.atan2(b.velocity.y(), b.velocity.x());
-
-          gp.translate(px, py);
-
-          gp.rotate(angle);
-
-          gp.drawImage(b.img, -b.width / 2, -b.height / 2, b.width, b.height, null);
-
-          gp.setTransform(originalTransform);
-        } else {
-          g.setColor(Color.RED);
-          g.fillRect(px, py, b.width, b.height);
-        }
-      }
-    } else {
-      for (Bird b : model.getBirds()) {
-        int px = toScreenX(b.pos.x());
-        int py = toScreenY(b.pos.y());
-
-        if (b.img != null) {
-          AffineTransform originalTransform = gp.getTransform();
-
-          double angle = Math.atan2(b.velocity.y(), b.velocity.x());
-
-          gp.translate(px, py);
-
-          gp.rotate(angle);
-
-          gp.drawImage(b.img, -b.width / 2, -b.height / 2, b.width, b.height, null);
-
-          gp.setTransform(originalTransform);
-        } else {
-          g.setColor(Color.RED);
-          g.fillRect(px, py, b.width, b.height);
-        }
+    if (model != null) {
+      for (Bird b : this.model.getBirds()) {
+        drawBird(gp, b);
       }
     }
   }

@@ -1,12 +1,8 @@
 package fr.oiseaux.model;
 
-import java.awt.image.BufferedImage;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import javax.imageio.ImageIO;
 
 public class BoidsModel implements BirdModel {
     public double radius;       // neighborhood radius
@@ -19,7 +15,6 @@ public class BoidsModel implements BirdModel {
     public double cohesionWeight = 1.0;
 
     private int birdNumber = 5;
-    private BufferedImage birdImg;
     private List<Bird> birds;
     private Random random = new Random();
 
@@ -29,12 +24,6 @@ public class BoidsModel implements BirdModel {
         this.v0 = v0;
         birds = new ArrayList<>();
 
-        try {
-            URL imageURL = this.getClass().getResource("/fr/oiseaux/724954.png");
-            this.birdImg = ImageIO.read(imageURL);
-        } catch (Exception var2) {
-            System.err.println("Image introuvable");
-        }
         initBirds();
     }
 
@@ -43,7 +32,7 @@ public class BoidsModel implements BirdModel {
             Vector3D v = new Vector3D(random.nextDouble()-0.5, random.nextDouble()-0.5, 0);
             Bird b = new Bird(
                 new Vector3D(random.nextInt(100), random.nextInt(100), 0),
-                v.normalize().scale(v0), 50, 50, birdImg
+                v.normalize().scale(v0)
             );
             birds.add(b);
         }
