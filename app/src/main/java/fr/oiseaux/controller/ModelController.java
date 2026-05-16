@@ -10,11 +10,13 @@ import javax.swing.event.ChangeEvent;
 import fr.oiseaux.model.BirdModel;
 import fr.oiseaux.model.BoidsModel;
 import fr.oiseaux.model.VicsekModel;
+import fr.oiseaux.view.BoidsControlPanel;
+import fr.oiseaux.view.BoidsViewParamPanel;
 import fr.oiseaux.view.ControlPanel;
 import fr.oiseaux.view.MainWindow;
 import fr.oiseaux.view.SimulationPanel;
+import fr.oiseaux.view.VicsekControlPanel;
 import fr.oiseaux.view.VicsekViewParamPanel;
-import fr.oiseaux.view.vicsekControlPanel;
 
 public class ModelController {
   //model
@@ -26,8 +28,10 @@ public class ModelController {
   private MainWindow window;
   private SimulationPanel viewSim;
   private ControlPanel viewCtrl;
-  private vicsekControlPanel viewVicsekCtrl;
+  private VicsekControlPanel viewVicsekCtrl;
   private VicsekViewParamPanel viewVicsekViewParam;
+  private BoidsControlPanel viewBoidsCtrl;
+  private BoidsViewParamPanel viewBoidsViewParam;
   private MenuItem menuBoids;
   private MenuItem menuVicsek;
 
@@ -46,6 +50,8 @@ public class ModelController {
     this.viewCtrl = viewCtrl;
     this.viewVicsekCtrl = viewCtrl.getVicsekControlPanel();
     this.viewVicsekViewParam = viewCtrl.getVicsekViewParamPanel();
+    this.viewBoidsCtrl = viewCtrl.getBoidsControlPanel();
+    this.viewBoidsViewParam = viewCtrl.getBoidsViewParamPanel();
 
     //Logic
     this.viewSim.setModel(this.model);
@@ -60,12 +66,17 @@ public class ModelController {
     initMenuBoidsListeners();
     initMenuVicsekListeners();
 
-    if (this.model instanceof VicsekModel) {
-      initVicsekRadiusSliderListener();
-      initVicsekEtaSliderListener();
-      initVicsekSpeedSliderListener();
-    }
-    
+    //VicsekListener
+    initVicsekRadiusSliderListener();
+    initVicsekEtaSliderListener();
+    initVicsekSpeedSliderListener();
+
+    //BoidsListener
+    initBoidsRadiusSliderListener();
+    initBoidsSeparationRadiusSliderListener();
+    initBoidsSeparationWeightSliderListener();
+    initBoidsAlignmentWeightSliderListener();
+    initBoidsCohesionWeightSliderListener();
 
   }
 
@@ -163,6 +174,98 @@ public class ModelController {
     });
 
     this.viewVicsekViewParam.updateVicsekSpeed(this.vicsekModel.getSpeed());
+  }
+
+  /////////////////////////Boids Listeners///////////////////////////
+  
+  //boidsRadius
+  private void initBoidsRadiusSliderListener() {
+
+    this.viewBoidsCtrl.radiusSlider.addChangeListener((ChangeEvent e) -> {
+      JSlider source = (JSlider) e.getSource();
+
+      if (!source.getValueIsAdjusting()) {
+        double val = this.viewBoidsCtrl.radiusSlider.getValue();
+        this.boidsModel.setBoidsRadius(val);
+        this.viewBoidsViewParam.updateBoidsRadius(this.boidsModel.getBoidsRadius());
+        viewSim.repaint();
+      }
+      
+    });
+
+    this.viewBoidsViewParam.updateBoidsRadius(this.boidsModel.getBoidsRadius());
+  }
+
+  //separationRadius
+  private void initBoidsSeparationRadiusSliderListener() {
+
+    this.viewBoidsCtrl.separationRadiusSlider.addChangeListener((ChangeEvent e) -> {
+      JSlider source = (JSlider) e.getSource();
+
+      if (!source.getValueIsAdjusting()) {
+        double val = this.viewBoidsCtrl.separationRadiusSlider.getValue();
+        this.boidsModel.setSeparationRadius(val/10);
+        this.viewBoidsViewParam.updateSeparationRadius(this.boidsModel.getSeparationRadius());
+        viewSim.repaint();
+      }
+      
+    });
+
+    this.viewBoidsViewParam.updateSeparationRadius(this.boidsModel.getSeparationRadius());
+  }
+
+  //separationWeight
+  private void initBoidsSeparationWeightSliderListener() {
+
+    this.viewBoidsCtrl.separationWeightSlider.addChangeListener((ChangeEvent e) -> {
+      JSlider source = (JSlider) e.getSource();
+
+      if (!source.getValueIsAdjusting()) {
+        double val = this.viewBoidsCtrl.separationWeightSlider.getValue();
+        this.boidsModel.setSeparationWeight(val/10);
+        this.viewBoidsViewParam.updateBoidsSeparationWeight(this.boidsModel.getSeparationWeight());
+        viewSim.repaint();
+      }
+      
+    });
+
+    this.viewBoidsViewParam.updateBoidsSeparationWeight(this.boidsModel.getSeparationWeight());
+  }
+
+  //AlignmentWeight
+  private void initBoidsAlignmentWeightSliderListener() {
+
+    this.viewBoidsCtrl.alignmentWeightSlider.addChangeListener((ChangeEvent e) -> {
+      JSlider source = (JSlider) e.getSource();
+
+      if (!source.getValueIsAdjusting()) {
+        double val = this.viewBoidsCtrl.alignmentWeightSlider.getValue();
+        this.boidsModel.setAlignmentWeight(val/10);
+        this.viewBoidsViewParam.updateBoidsAlignmentWeight(this.boidsModel.getAlignmentWeight());
+        viewSim.repaint();
+      }
+      
+    });
+
+    this.viewBoidsViewParam.updateBoidsAlignmentWeight(this.boidsModel.getAlignmentWeight());
+  }
+
+  //CohesionWeight
+  private void initBoidsCohesionWeightSliderListener() {
+
+    this.viewBoidsCtrl.cohesionWeightSlider.addChangeListener((ChangeEvent e) -> {
+      JSlider source = (JSlider) e.getSource();
+
+      if (!source.getValueIsAdjusting()) {
+        double val = this.viewBoidsCtrl.cohesionWeightSlider.getValue();
+        this.boidsModel.setCohesionWeight(val/10);
+        this.viewBoidsViewParam.updateBoidsCohesionWeight(this.boidsModel.getCohesionWeight());
+        viewSim.repaint();
+      }
+      
+    });
+
+    this.viewBoidsViewParam.updateBoidsCohesionWeight(this.boidsModel.getCohesionWeight());
   }
 
   //Logic

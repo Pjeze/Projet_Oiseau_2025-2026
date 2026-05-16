@@ -52,6 +52,48 @@ public class BoidsModel implements BirdModel {
         }
     }
 
+    //setter and getter for radius
+    public void setBoidsRadius(double n) {
+        this.radius = n;
+    }
+    public double getBoidsRadius() {
+        return this.radius;
+    }
+
+    //setter and getter for separationradius
+    public void setSeparationRadius(double n) {
+        this.separationRadius = n;
+    }
+    public double getSeparationRadius() {
+        return this.separationRadius;
+    }
+
+    //setter and getter for separationWeight
+    public void setSeparationWeight(double n) {
+        this.separationWeight = n;
+    }
+    public double getSeparationWeight() {
+        return this.separationWeight;
+    }
+
+    //setter and getter for alignmentWeight
+    public void setAlignmentWeight(double n) {
+        this.alignmentWeight = n;
+    }
+    public double getAlignmentWeight() {
+        return this.alignmentWeight;
+    }
+
+    //setter and getter for cohesionWeight
+    public void setCohesionWeight(double n) {
+        this.cohesionWeight = n;
+    }
+    public double getCohesionWeight() {
+        return this.cohesionWeight;
+    }
+
+
+
     @Override
     public int getBirdNumber() { return this.birdNumber; }
 

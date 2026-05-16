@@ -3,7 +3,6 @@ package fr.oiseaux.view;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
 import java.awt.Toolkit;
 import java.text.NumberFormat;
 
@@ -51,8 +50,10 @@ public class ControlPanel extends JPanel {
             JLabel birdNumberLabel = new JLabel("Enter bird number : ");
             public JFormattedTextField birdNumberField = new JFormattedTextField(NumberFormat.getIntegerInstance());
 
-            //vicsekParameter panel
-            vicsekControlPanel vicsekParameterPanel;
+            //modelControlPanel
+            JPanel modelControlPanel = new JPanel();
+            VicsekControlPanel vicsekControlPanel;
+            BoidsControlPanel boidsControlPanel;
 
       //characteristics panel
       JPanel characteristicsPanel = new JPanel();
@@ -68,8 +69,10 @@ public class ControlPanel extends JPanel {
           JPanel charBirdNumberPanel = new JPanel();
           JLabel charBirdNumberLabel = new JLabel("");
 
-          //Model Panel
-          VicsekViewParamPanel viewVicsekViewParamPanel;
+          //ModelViewPanel
+          JPanel modelViewPanel = new JPanel();
+          VicsekViewParamPanel viewVicsekParamPanel;
+          BoidsViewParamPanel viewBoidsParamPanel;
 
   //submit pannel
   JPanel submitPanel = new JPanel();
@@ -86,7 +89,7 @@ public class ControlPanel extends JPanel {
     titlePanel.add(titleLabel);
 
     //core panel
-    corePanel.setLayout(new GridLayout(2,1));
+    corePanel.setLayout(new BorderLayout());
 
         //changement panel
         changementPanel.setLayout(new BorderLayout());
@@ -106,13 +109,14 @@ public class ControlPanel extends JPanel {
               birdNumberPanel.add(birdNumberField);
               coreChangementPanel.add(birdNumberPanel, BorderLayout.NORTH);
 
-              //vicsekParameter panel
-              vicsekParameterPanel = new vicsekControlPanel();
-              coreChangementPanel.add(vicsekParameterPanel, BorderLayout.CENTER);
+              //modelControlPanel
+              vicsekControlPanel = new VicsekControlPanel();
+              boidsControlPanel = new BoidsControlPanel();
+              coreChangementPanel.add(modelControlPanel, BorderLayout.CENTER);
 
-            changementPanel.add(coreChangementPanel);
+            changementPanel.add(coreChangementPanel, BorderLayout.CENTER);
 
-        corePanel.add(changementPanel);
+        corePanel.add(changementPanel, BorderLayout.NORTH);
 
         //characteristics panel
         characteristicsPanel.setLayout(new BorderLayout());
@@ -124,33 +128,34 @@ public class ControlPanel extends JPanel {
             characteristicsPanel.add(charTitlePanel, BorderLayout.NORTH);
 
             //core characteristics Panel
-            coreCharacteristicsPanel.setLayout(new GridLayout(2, 1));
+            coreCharacteristicsPanel.setLayout(new BorderLayout());
 
               //characteristics bird number panel
               charBirdNumberLabel.setText("Bird number: " + 5);
               charBirdNumberPanel.add(charBirdNumberLabel);
-              coreCharacteristicsPanel.add(charBirdNumberPanel);
+              coreCharacteristicsPanel.add(charBirdNumberPanel, BorderLayout.NORTH);
 
-              //Model Panel
-              viewVicsekViewParamPanel = new VicsekViewParamPanel();
-              viewVicsekViewParamPanel.setControlPanel(this);
-              coreCharacteristicsPanel.add(viewVicsekViewParamPanel);
+              //ModelViewPanel
+              viewVicsekParamPanel = new VicsekViewParamPanel();
+              viewVicsekParamPanel.setControlPanel(this);
+              viewBoidsParamPanel = new BoidsViewParamPanel();
+              coreCharacteristicsPanel.add(modelViewPanel, BorderLayout.CENTER);
             
             characteristicsPanel.add(coreCharacteristicsPanel, BorderLayout.CENTER);
 
 
-        corePanel.add(characteristicsPanel);
+        corePanel.add(characteristicsPanel, BorderLayout.CENTER);
 
     //submit panel
     submitPanel.add(submitButton);
 
     //model visibility
     if (this.model instanceof VicsekModel) {
-      vicsekParameterPanel.setVisible(true);
-      viewVicsekViewParamPanel.setVisible(true);
+      modelControlPanel.add(vicsekControlPanel);
+      modelViewPanel.add(viewVicsekParamPanel);
     } else {
-      vicsekParameterPanel.setVisible(false);
-      viewVicsekViewParamPanel.setVisible(false);
+      modelControlPanel.add(boidsControlPanel);
+      modelViewPanel.add(viewBoidsParamPanel);
     }
     //add to the board
     setLayout(new BorderLayout());
@@ -167,24 +172,39 @@ public class ControlPanel extends JPanel {
 
   public void updateControlPanel(int modelType) {
     if (this.model instanceof VicsekModel) {
-      vicsekParameterPanel.setVisible(true);
-      viewVicsekViewParamPanel.setVisible(true);
+      this.modelControlPanel.removeAll();
+      this.modelViewPanel.removeAll();
+      this.modelControlPanel.add(this.vicsekControlPanel);
+      this.modelViewPanel.add(this.viewVicsekParamPanel);
     } else {
-      vicsekParameterPanel.setVisible(false);
-      viewVicsekViewParamPanel.setVisible(false);
+      this.modelControlPanel.removeAll();
+      this.modelViewPanel.removeAll();
+      this.modelControlPanel.add(this.boidsControlPanel);
+      this.modelViewPanel.add(this.viewBoidsParamPanel);
     }
+    this.changementPanel.revalidate();
+    this.changementPanel.repaint();
+    this.characteristicsPanel.revalidate();
+    this.characteristicsPanel.repaint();
   }
 
   //getter for child panel
   public VicsekViewParamPanel getVicsekViewParamPanel() {
-      return this.viewVicsekViewParamPanel;
+      return this.viewVicsekParamPanel;
   }
-  public vicsekControlPanel getVicsekControlPanel() {
-      return this.vicsekParameterPanel;
+  public VicsekControlPanel getVicsekControlPanel() {
+      return this.vicsekControlPanel;
+  }
+  public BoidsViewParamPanel getBoidsViewParamPanel() {
+      return this.viewBoidsParamPanel;
+  }
+  public BoidsControlPanel getBoidsControlPanel() {
+      return this.boidsControlPanel;
   }
 
   //update
   public void updateBirdNumber(int count) {
     charBirdNumberLabel.setText("Bird number : " + count);
   }
+
 }

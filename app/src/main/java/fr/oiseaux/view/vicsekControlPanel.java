@@ -11,7 +11,7 @@ import javax.swing.SwingConstants;
 
 
 
-public class vicsekControlPanel extends JPanel {
+public class VicsekControlPanel extends JPanel {
 
     //title panel
     JPanel titlePanel = new JPanel();
@@ -35,7 +35,7 @@ public class vicsekControlPanel extends JPanel {
     JLabel speedLabel = new JLabel("Bird speed :");
     public JSlider speedSlider = new JSlider(JSlider.HORIZONTAL, 1, 101, 20);
 
-    public vicsekControlPanel() {
+    public VicsekControlPanel() {
         setLayout(new BorderLayout());
 
         //title
