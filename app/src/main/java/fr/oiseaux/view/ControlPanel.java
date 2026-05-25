@@ -131,7 +131,7 @@ public class ControlPanel extends JPanel {
             coreCharacteristicsPanel.setLayout(new BorderLayout());
 
               //characteristics bird number panel
-              charBirdNumberLabel.setText("Bird number: " + 5);
+              charBirdNumberLabel.setText("Bird number : " + 5);
               charBirdNumberPanel.add(charBirdNumberLabel);
               coreCharacteristicsPanel.add(charBirdNumberPanel, BorderLayout.NORTH);
 

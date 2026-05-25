@@ -59,15 +59,15 @@ public class VicsekViewParamPanel extends JPanel {
     }
 
     public void updateVicsekRadius(double r) {
-        radiusLabel.setText("Field View Radius :" + r);
+        radiusLabel.setText("Field View Radius : " + r);
     }
 
     public void updateVicsekEta(double eta) {
-        etaLabel.setText("Random noise :" + eta);
+        etaLabel.setText("Random noise : " + eta);
     }
 
     public void updateVicsekSpeed(double speed) {
-        speedLabel.setText("Bird speed :" + speed);
+        speedLabel.setText("Bird speed : " + speed);
     }
 
 }

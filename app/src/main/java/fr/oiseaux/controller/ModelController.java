@@ -1,8 +1,8 @@
 package fr.oiseaux.controller;
 
-import java.awt.MenuItem;
 import java.awt.event.ActionEvent;
 
+import javax.swing.JMenuItem;
 import javax.swing.JSlider;
 import javax.swing.Timer;
 import javax.swing.event.ChangeEvent;
@@ -32,8 +32,8 @@ public class ModelController {
   private VicsekViewParamPanel viewVicsekViewParam;
   private BoidsControlPanel viewBoidsCtrl;
   private BoidsViewParamPanel viewBoidsViewParam;
-  private MenuItem menuBoids;
-  private MenuItem menuVicsek;
+  private JMenuItem menuBoids;
+  private JMenuItem menuVicsek;
 
   //Logic
   private Timer timer;
@@ -54,7 +54,7 @@ public class ModelController {
     this.viewBoidsViewParam = viewCtrl.getBoidsViewParamPanel();
 
     //Logic
-    this.viewSim.setModel(this.model);
+    this.viewSim.simCanvas.setModel(this.model);
     this.viewCtrl.setModel(this.model);
     initListeners();
     startModelLoop();
@@ -285,7 +285,7 @@ public class ModelController {
       this.model = this.boidsModel;
     }
 
-    viewSim.setModel(this.model);
+    viewSim.simCanvas.setModel(this.model);
     viewCtrl.setModel(this.model);
 
     timer.start();

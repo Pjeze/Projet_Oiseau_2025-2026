@@ -1,20 +1,16 @@
 package fr.oiseaux.view;
 
-import java.awt.Color;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Toolkit;
-import java.awt.geom.AffineTransform;
 
 import javax.swing.JPanel;
 
-import fr.oiseaux.model.Bird;
-import fr.oiseaux.model.BirdModel;
-
 public class SimulationPanel extends JPanel {
   //Model
-  private BirdModel model;
+  //private BirdModel model;
+
+  public Simulation3DCanvas simCanvas;
 
   //Dimension
   //main window
@@ -26,31 +22,34 @@ public class SimulationPanel extends JPanel {
   int simWidth = (int) (4*screenWidth/5);
   int simHeight = (int) (screenHeight*0.9);
 
-  double xMin = 0, xMax = 100, yMin = 0, yMax = 100;
-  int margin = 50;
+  //double xMin = 0, xMax = 100, yMin = 0, yMax = 100;
+  //int margin = 50;
 
   public SimulationPanel() {
     setSize(simWidth, simHeight);
+    simCanvas = new Simulation3DCanvas();
+    //simCanvas.setSize(simWidth, simHeight);
+    setLayout(new BorderLayout());
+    add(simCanvas, BorderLayout.CENTER);
   }
 
-
+  /*
   public void setModel(BirdModel mdl) {
     this.model = mdl;
   }
-
   
-  int toScreenX(double x) {
+  public int toScreenX(double x) {
     return margin + (int) ((x - xMin) / (xMax - xMin) * (getWidth() - 2 * margin));
   }
 
-  int toScreenY(double y) {
+  public int toScreenY(double y) {
     return margin + (int) ((y - yMin) / (yMax - yMin) * (getHeight() - 2 * margin));
   }
 
   private void drawBird (Graphics2D g2d, Bird b) {
     int px = toScreenX(b.pos.x());
     int py = toScreenY(b.pos.y());
-    Color color = Color.GREEN;
+    Color color = new Color((int)(b.pos.z() * 255 / 100), 255 - (int)(b.pos.z() * 255 / 100), 0);
 
     int length = (getWidth() - 2 * margin) / 100;
     int width  = length / 2;                       
@@ -92,4 +91,5 @@ public class SimulationPanel extends JPanel {
       }
     }
   }
+    */
 }

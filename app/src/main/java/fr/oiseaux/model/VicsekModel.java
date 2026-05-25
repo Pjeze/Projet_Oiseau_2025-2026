@@ -23,8 +23,14 @@ public class VicsekModel implements BirdModel {
 
   private void initBirds() {
     while (birds.size() < birdNumber) {
-      Vector3D v = new Vector3D(random.nextDouble()-0.5,random.nextDouble()-0.5, 0);
-      Bird b = new Bird(new Vector3D(random.nextInt(100), random.nextInt(100), 0),
+      Vector3D v = new Vector3D(
+              random.nextDouble()-0.5,
+              random.nextDouble()-0.5,
+              random.nextDouble()-0.5);
+      Bird b = new Bird(new Vector3D(
+              random.nextInt(100),
+              random.nextInt(100),
+              random.nextInt(100)),
           v.normalize().scale(v0)
         );
       birds.add(b);
@@ -80,13 +86,26 @@ public class VicsekModel implements BirdModel {
         if (diff.y() < -50)
           diff.setY(diff.y() + 100);
 
+        if (diff.z() > 50)
+          diff.setZ(100 - diff.z());
+        if (diff.z() < -50)
+          diff.setZ(diff.z() + 100);
+
         if (diff.norm2() <= radius * radius) {
           vSum = Vector3D.add(vSum, c.velocity);
         }
       }
-      Vector3D randomNoise = new Vector3D((random.nextDouble()-0.5)*2, (random.nextDouble()-0.5)*2, 0);
+      Vector3D randomNoise = new Vector3D(
+                (random.nextDouble()-0.5)*2,
+                (random.nextDouble()-0.5)*2,
+                (random.nextDouble()-0.5)*2
+              );
       while (randomNoise.norm2() > 1.0) {
-          randomNoise = new Vector3D((random.nextDouble()-0.5)*2, (random.nextDouble()-0.5)*2, 0);
+          randomNoise = new Vector3D(
+            (random.nextDouble()-0.5)*2,
+            (random.nextDouble()-0.5)*2,
+            (random.nextDouble()-0.5)*2
+          );
       }
       randomNoise = randomNoise.normalize();
       Vector3D newVelocity = Vector3D.add(vSum, randomNoise.scale(eta)).normalize().scale(v0);
@@ -100,6 +119,10 @@ public class VicsekModel implements BirdModel {
         b.pos.setY(b.pos.y() - 100);
       if (b.pos.y() < 0)
         b.pos.setY(b.pos.y() + 100);
+      if (b.pos.z() > 100)
+        b.pos.setZ(b.pos.z() - 100);
+      if (b.pos.z() < 0)
+        b.pos.setZ(b.pos.z() + 100);
     }
     for (int i = 0; i < birds.size(); i++) {
       birds.get(i).velocity = tabVelocities.get(i);

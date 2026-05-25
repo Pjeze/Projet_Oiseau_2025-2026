@@ -1,17 +1,18 @@
 package fr.oiseaux.view;
 
-import java.awt.Menu;
-import java.awt.MenuItem;
+import javax.swing.JMenu;
+import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 
-public class MenuMainWindow extends java.awt.MenuBar {
+public class MenuMainWindow extends JMenuBar {
     
-    public MenuItem menuBoids, menuVicsek;
+    public JMenuItem menuBoids, menuVicsek;
 
     public MenuMainWindow () {
 
-        Menu menuModel = new Menu("Model");
-        menuBoids = new MenuItem("Boids");
-        menuVicsek = new MenuItem("Vicsek");
+        JMenu menuModel = new JMenu("Model");
+        menuBoids = new JMenuItem("Boids");
+        menuVicsek = new JMenuItem("Vicsek");
 
         menuModel.add(menuBoids);
         menuModel.addSeparator();
@@ -21,11 +22,6 @@ public class MenuMainWindow extends java.awt.MenuBar {
 
     }
 
-    public MenuItem getMenuBoids() {
-        return this.menuBoids;
-    }
-
-    public MenuItem getMenuVicsek() {
-        return this.menuVicsek;
-    }
+    public JMenuItem getMenuBoids() { return this.menuBoids; }
+    public JMenuItem getMenuVicsek() { return this.menuVicsek; }
 }

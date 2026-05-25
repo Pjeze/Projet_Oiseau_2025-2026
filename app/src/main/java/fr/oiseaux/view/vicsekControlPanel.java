@@ -49,7 +49,7 @@ public class VicsekControlPanel extends JPanel {
         radiusSlider.setMajorTickSpacing(5);
         radiusSlider.setMinorTickSpacing(1);
         radiusSlider.setPaintTicks(true);
-        radiusSlider.setPaintLabels(true);
+        radiusSlider.setPaintLabels(false);
         radiusPanel.add(radiusSlider);
         corePanel.add(radiusPanel);
 
@@ -59,17 +59,17 @@ public class VicsekControlPanel extends JPanel {
         etaSlider.setMajorTickSpacing(5);
         etaSlider.setMinorTickSpacing(1);
         etaSlider.setPaintTicks(true);
-        etaSlider.setPaintLabels(true);
+        etaSlider.setPaintLabels(false);
         etaPanel.add(etaSlider);
         corePanel.add(etaPanel);
 
-        //speed (bruit)
+        //speed
         speedLabel.setHorizontalAlignment(SwingConstants.CENTER);
         speedPanel.add(speedLabel);
         speedSlider.setMajorTickSpacing(10);
         speedSlider.setMinorTickSpacing(5);
         speedSlider.setPaintTicks(true);
-        speedSlider.setPaintLabels(true);
+        speedSlider.setPaintLabels(false);
         speedPanel.add(speedSlider);
         corePanel.add(speedPanel);
 

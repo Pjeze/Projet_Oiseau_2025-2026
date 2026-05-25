@@ -5,6 +5,9 @@ package fr.oiseaux;
 
 import javax.swing.SwingUtilities;
 
+import com.formdev.flatlaf.FlatLightLaf;
+import com.jogamp.opengl.GLProfile;
+
 import fr.oiseaux.controller.ModelController;
 import fr.oiseaux.model.BoidsModel;
 import fr.oiseaux.model.VicsekModel;
@@ -14,12 +17,18 @@ import fr.oiseaux.view.SimulationPanel;
 
 public class App {
   public static void main(String[] args) {
+
+    GLProfile.initSingleton();
+
     SwingUtilities.invokeLater(() -> {
-      VicsekModel vicsekModel = new VicsekModel(8, 0.0001, 0.23);
-      BoidsModel boidsModel = new BoidsModel(8, 0.0001, 0.23);
+      FlatLightLaf.setup();
 
       SimulationPanel simPanel = new SimulationPanel();
       ControlPanel ctrlPanel = new ControlPanel();
+
+      VicsekModel vicsekModel = new VicsekModel(8, 0.0001, 0.23);
+      BoidsModel boidsModel = new BoidsModel(12, 4, 0.23);
+
       MainWindow window = new MainWindow(simPanel, ctrlPanel);
 
       new ModelController(vicsekModel, boidsModel, window, simPanel, ctrlPanel);

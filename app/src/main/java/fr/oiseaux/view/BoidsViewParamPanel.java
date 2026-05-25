@@ -47,48 +47,48 @@ public class BoidsViewParamPanel extends JPanel {
         add(titleLabel);
 
         //radius
-        radiusLabel.setText("Field View Radius : 10");
+        radiusLabel.setText("Field View Radius : 12");
         radiusPanel.add(radiusLabel);
         add(radiusPanel);
 
         //Separation radius
-        separationRadiusLabel.setText("Separation radius : 10");
+        separationRadiusLabel.setText("Separation radius : 4");
         separationRadiusPanel.add(separationRadiusLabel);
         add(separationRadiusPanel);
 
         //separationWeight
-        separationWeightLabel.setText("Separation weight : 10");
+        separationWeightLabel.setText("Separation weight : 1.2");
         separationWeightPanel.add(separationWeightLabel);
         add(separationWeightPanel);
 
         //alignmentWeight
-        alignmentWeightLabel.setText("alignment weight : 10");
+        alignmentWeightLabel.setText("Alignment weight : 0.6");
         alignmentWeightPanel.add(alignmentWeightLabel);
         add(alignmentWeightPanel);
 
         //cohesionWeight
-        cohesionWeightLabel.setText("cohesion weight : 10");
+        cohesionWeightLabel.setText("Cohesion weight : 0.4");
         cohesionWeightPanel.add(cohesionWeightLabel);
         add(cohesionWeightPanel);
     }
 
     public void updateBoidsRadius(double r) {
-        radiusLabel.setText("Field View Radius :" + r);
+        radiusLabel.setText("Field View Radius : " + r);
     }
     
     public void updateSeparationRadius(double rs) {
-        radiusLabel.setText("Field View Radius :" + rs);
+        separationRadiusLabel.setText("Field View Radius : " + rs);
     }
 
     public void updateBoidsSeparationWeight(double ws) {
-        radiusLabel.setText("Separation weight :" + ws);
+        separationWeightLabel.setText("Separation weight : " + ws);
     }
 
     public void updateBoidsAlignmentWeight(double wa) {
-        radiusLabel.setText("Alignment weight :" + wa);
+        alignmentWeightLabel.setText("Alignment weight : " + wa);
     }
 
     public void updateBoidsCohesionWeight(double wc) {
-        radiusLabel.setText("Cohesion weight :" + wc);
+        cohesionWeightLabel.setText("Cohesion weight : " + wc);
     }
 }
