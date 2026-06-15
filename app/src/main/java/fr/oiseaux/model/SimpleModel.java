@@ -3,31 +3,21 @@ package fr.oiseaux.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-import java.net.URL;
 
 public class SimpleModel {
   private List<Bird> birds;
   private int birdNumber = 5;
   private Random random = new Random();
-  private BufferedImage birdImg;
 
   public SimpleModel() {
     birds = new ArrayList<>();
 
-    try {
-      URL imageURL = getClass().getResource("/fr/oiseaux/724954.png");
-      birdImg = ImageIO.read(imageURL);
-    } catch (Exception e) {
-      System.err.println("Image introuvable");
-    }
     initBirds();
   }
 
   private void initBirds() {
     while (birds.size() < birdNumber) {
-      Bird b = new Bird(new Vector3D(50, 50, 0), new Vector3D(2, 2, 0), 50, 50, birdImg);
+      Bird b = new Bird(new Vector3D(50, 50, 0), new Vector3D(2, 2, 0));
       birds.add(b);
     }
     while (birds.size() > birdNumber) {

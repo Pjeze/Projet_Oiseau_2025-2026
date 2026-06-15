@@ -3,24 +3,35 @@
  */
 package fr.oiseaux;
 
-import fr.oiseaux.model.SimpleModel;
+import javax.swing.SwingUtilities;
+
+import com.formdev.flatlaf.FlatLightLaf;
+import com.jogamp.opengl.GLProfile;
+
+import fr.oiseaux.controller.ModelController;
+import fr.oiseaux.model.BoidsModel;
+import fr.oiseaux.model.VicsekModel;
 import fr.oiseaux.view.ControlPanel;
 import fr.oiseaux.view.MainWindow;
 import fr.oiseaux.view.SimulationPanel;
-import fr.oiseaux.controller.ModelController;
-import javax.swing.SwingUtilities;
-import fr.oiseaux.model.VicsekModel;
 
 public class App {
   public static void main(String[] args) {
-    SwingUtilities.invokeLater(() -> {
-      VicsekModel model = new VicsekModel(8, 0.0001, 0.23);
 
-      SimulationPanel simPanel = new SimulationPanel(model);
+    GLProfile.initSingleton();
+
+    SwingUtilities.invokeLater(() -> {
+      FlatLightLaf.setup();
+
+      SimulationPanel simPanel = new SimulationPanel();
       ControlPanel ctrlPanel = new ControlPanel();
+
+      VicsekModel vicsekModel = new VicsekModel(8, 0.0001, 0.23);
+      BoidsModel boidsModel = new BoidsModel(12, 4, 0.23);
+
       MainWindow window = new MainWindow(simPanel, ctrlPanel);
 
-      new ModelController(model, simPanel, ctrlPanel);
+      new ModelController(vicsekModel, boidsModel, window, simPanel, ctrlPanel);
 
       window.setVisible(true);
     });

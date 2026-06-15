@@ -1,44 +1,38 @@
 package fr.oiseaux.model;
 
-import fr.oiseaux.model.Vector3D;
-import fr.oiseaux.model.Bird;
-import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.awt.image.BufferedImage;
-import javax.imageio.ImageIO;
-import java.net.URL;
 
-public class VicsekModel {
-  public double r;
+public class VicsekModel implements BirdModel {
+  public double radius;
   public double eta;
   public double v0;
   private int birdNumber = 5;
-  private BufferedImage birdImg;
   private List<Bird> birds;
   private Random random = new Random();
 
   public VicsekModel(double r, double eta, double v0) {
-    this.r = r;
+    this.radius = r;
     this.eta = eta;
     this.v0 = v0;
     birds = new ArrayList<>();
 
-    try {
-      URL imageURL = this.getClass().getResource("/fr/oiseaux/724954.png");
-      this.birdImg = ImageIO.read(imageURL);
-    } catch (Exception var2) {
-      System.err.println("Image introuvable");
-    }
     initBirds();
   }
 
   private void initBirds() {
     while (birds.size() < birdNumber) {
-      Vector3D v = new Vector3D(random.nextDouble()-0.5,random.nextDouble()-0.5, 0);
-      Bird b = new Bird(new Vector3D(random.nextInt(100), random.nextInt(100), 0),
-          v.normalize().scale(v0), 50, 50, birdImg);
+      Vector3D v = new Vector3D(
+              random.nextDouble()-0.5,
+              random.nextDouble()-0.5,
+              random.nextDouble()-0.5);
+      Bird b = new Bird(new Vector3D(
+              random.nextInt(100),
+              random.nextInt(100),
+              random.nextInt(100)),
+          v.normalize().scale(v0)
+        );
       birds.add(b);
     }
     while (birds.size() > birdNumber) {
@@ -46,19 +40,36 @@ public class VicsekModel {
     }
   }
 
+  //setter and getter for bird
+  @Override
   public int getBirdNumber() {
     return this.birdNumber;
   }
 
+  @Override
   public List<Bird> getBirds() {
     return this.birds;
   }
 
+  @Override
   public void setBirdNumber(int n) {
     this.birdNumber = n;
     initBirds();
   }
 
+  //setter and getter for radius
+  public void setRadius(double n) { this.radius = n; }
+  public double getRadius() { return this.radius; }
+
+  //setter and getter for eta
+  public void setEta(double n) { this.eta = n; }
+  public double getEta() { return this.eta; }
+
+  //setter and getter for speed
+  public void setSpeed(double n) { this.v0 = n; }
+  public double getSpeed() { return this.v0; }
+
+  @Override
   public void updateMovement() {
     List<Vector3D> tabVelocities = new ArrayList<>(birds.size());
     for (Bird b : birds) {
@@ -75,13 +86,26 @@ public class VicsekModel {
         if (diff.y() < -50)
           diff.setY(diff.y() + 100);
 
-        if (diff.norm2() <= r * r) {
+        if (diff.z() > 50)
+          diff.setZ(100 - diff.z());
+        if (diff.z() < -50)
+          diff.setZ(diff.z() + 100);
+
+        if (diff.norm2() <= radius * radius) {
           vSum = Vector3D.add(vSum, c.velocity);
         }
       }
-      Vector3D randomNoise = new Vector3D((random.nextDouble()-0.5)*2, (random.nextDouble()-0.5)*2, 0);
+      Vector3D randomNoise = new Vector3D(
+                (random.nextDouble()-0.5)*2,
+                (random.nextDouble()-0.5)*2,
+                (random.nextDouble()-0.5)*2
+              );
       while (randomNoise.norm2() > 1.0) {
-          randomNoise = new Vector3D((random.nextDouble()-0.5)*2, (random.nextDouble()-0.5)*2, 0);
+          randomNoise = new Vector3D(
+            (random.nextDouble()-0.5)*2,
+            (random.nextDouble()-0.5)*2,
+            (random.nextDouble()-0.5)*2
+          );
       }
       randomNoise = randomNoise.normalize();
       Vector3D newVelocity = Vector3D.add(vSum, randomNoise.scale(eta)).normalize().scale(v0);
@@ -95,6 +119,10 @@ public class VicsekModel {
         b.pos.setY(b.pos.y() - 100);
       if (b.pos.y() < 0)
         b.pos.setY(b.pos.y() + 100);
+      if (b.pos.z() > 100)
+        b.pos.setZ(b.pos.z() - 100);
+      if (b.pos.z() < 0)
+        b.pos.setZ(b.pos.z() + 100);
     }
     for (int i = 0; i < birds.size(); i++) {
       birds.get(i).velocity = tabVelocities.get(i);

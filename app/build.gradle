@@ -23,6 +23,13 @@ dependencies {
 
     // This dependency is used by the application.
     implementation libs.guava
+
+    //For a better looking UI
+    implementation 'com.formdev:flatlaf:3.4'
+
+    //For 3D
+    implementation 'org.jogamp.jogl:jogl-all-main:2.3.2'
+    implementation 'org.jogamp.gluegen:gluegen-rt-main:2.3.2'
 }
 
 // Apply a specific Java toolchain to ease working on different environments.
