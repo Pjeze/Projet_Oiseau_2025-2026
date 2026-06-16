@@ -44,7 +44,7 @@ public class VicsekViewParamPanel extends JPanel {
         add(radiusPanel);
 
         //eta
-        etaLabel.setText("Random noise : 10");
+        etaLabel.setText("Random noise : 10°");
         etaPanel.add(etaLabel);
         add(etaPanel);
 
@@ -63,7 +63,7 @@ public class VicsekViewParamPanel extends JPanel {
     }
 
     public void updateVicsekEta(double eta) {
-        etaLabel.setText("Random noise : " + eta);
+        etaLabel.setText(String.format("Random noise : %.0f°", Math.toDegrees(eta)));
     }
 
     public void updateVicsekSpeed(double speed) {

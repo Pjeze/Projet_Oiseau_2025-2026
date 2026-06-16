@@ -57,6 +57,13 @@ public class Vector3D {
     return new Vector3D(u.x() - v.x(), u.y() - v.y(), u.z() - v.z());
   }
 
+  public static Vector3D cross(Vector3D u, Vector3D v) {
+    return new Vector3D(
+        u.y() * v.z() - u.z() * v.y(),
+        u.z() * v.x() - u.x() * v.z(),
+        u.x() * v.y() - u.y() * v.x());
+  }
+
   public double norm2() {
     return this.x * this.x + this.y * this.y + this.z * this.z;
   }
