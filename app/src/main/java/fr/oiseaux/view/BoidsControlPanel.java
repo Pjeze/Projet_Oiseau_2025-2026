@@ -4,10 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 
+import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
+
+import fr.oiseaux.model.BoundaryMode;
 
 public class BoidsControlPanel extends JPanel {
 
@@ -16,7 +19,7 @@ public class BoidsControlPanel extends JPanel {
     JLabel titleLabel = new JLabel("Boids Parameters");
 
     //core panel
-    JPanel corePanel = new JPanel(new GridLayout(5, 1));
+    JPanel corePanel = new JPanel(new GridLayout(6, 1));
 
     //Visual field radius panel
     JPanel radiusPanel = new JPanel(new GridLayout(2, 1));
@@ -42,6 +45,11 @@ public class BoidsControlPanel extends JPanel {
     JPanel cohesionWeightPanel = new JPanel(new GridLayout(2, 1));
     JLabel cohesionWeightLabel = new JLabel("Cohesion weight :");
     public JSlider cohesionWeightSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 4);
+
+    //BoundaryMode panel
+    JPanel boundaryModePanel = new JPanel(new GridLayout(2, 1));
+    JLabel boundaryModeLabel = new JLabel("Boundary Mode : ");
+    public JComboBox<BoundaryMode> boundaryModeComboBox = new JComboBox<>(BoundaryMode.values());
 
     public BoidsControlPanel() {
         setLayout(new BorderLayout());
@@ -100,6 +108,13 @@ public class BoidsControlPanel extends JPanel {
         cohesionWeightSlider.setPaintLabels(false);
         cohesionWeightPanel.add(cohesionWeightSlider);
         corePanel.add(cohesionWeightPanel);
+
+        //boundaryMode
+        boundaryModeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        boundaryModePanel.add(boundaryModeLabel);
+        boundaryModePanel.add(boundaryModeComboBox);
+        corePanel.add(boundaryModePanel);
+
 
 
         //add to panel

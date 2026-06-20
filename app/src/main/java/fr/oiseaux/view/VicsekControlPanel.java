@@ -8,6 +8,9 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.SwingConstants;
+import javax.swing.JComboBox;
+
+import fr.oiseaux.model.BoundaryMode;
 
 
 
@@ -18,7 +21,7 @@ public class VicsekControlPanel extends JPanel {
     JLabel titleLabel = new JLabel("Vicsek Parameters");
 
     //core panel
-    JPanel corePanel = new JPanel(new GridLayout(3, 1));
+    JPanel corePanel = new JPanel(new GridLayout(4, 1));
 
     //Visual field radius panel
     JPanel radiusPanel = new JPanel(new GridLayout(2, 1));
@@ -34,6 +37,10 @@ public class VicsekControlPanel extends JPanel {
     JPanel speedPanel = new JPanel(new GridLayout(2, 1));
     JLabel speedLabel = new JLabel("Bird speed :");
     public JSlider speedSlider = new JSlider(JSlider.HORIZONTAL, 1, 101, 20);
+
+    JPanel boundaryModePanel = new JPanel(new GridLayout(2, 1));
+    JLabel boundaryModeLabel = new JLabel("Boundary mode : ");
+    public JComboBox<BoundaryMode> boundaryModeComboBox = new JComboBox<>(BoundaryMode.values());
 
     public VicsekControlPanel() {
         setLayout(new BorderLayout());
@@ -72,6 +79,11 @@ public class VicsekControlPanel extends JPanel {
         speedSlider.setPaintLabels(false);
         speedPanel.add(speedSlider);
         corePanel.add(speedPanel);
+
+        boundaryModeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        boundaryModePanel.add(boundaryModeLabel);
+        boundaryModePanel.add(boundaryModeComboBox);
+        corePanel.add(boundaryModePanel);
 
 
         //add to panel

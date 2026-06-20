@@ -7,6 +7,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
+import fr.oiseaux.model.BoundaryMode;
 import fr.oiseaux.model.VicsekModel;
 
 public class VicsekViewParamPanel extends JPanel {
@@ -29,8 +30,11 @@ public class VicsekViewParamPanel extends JPanel {
     JPanel speedPanel = new JPanel();
     JLabel speedLabel = new JLabel();
 
+    JPanel boundaryModePanel = new JPanel();
+    JLabel boundaryModeLabel = new JLabel();
+
     public VicsekViewParamPanel() {
-        setLayout(new GridLayout(4, 1));
+        setLayout(new GridLayout(5, 1));
 
         //title
         titleLabel.setText("Vicsek Parameters");
@@ -52,6 +56,10 @@ public class VicsekViewParamPanel extends JPanel {
         speedLabel.setText("Bird speed : 10");
         speedPanel.add(speedLabel);
         add(speedPanel);
+
+        boundaryModeLabel.setText("Boundary mode : CLOSED_BOX");
+        boundaryModePanel.add(boundaryModeLabel);
+        add(boundaryModePanel);
     }
 
     public void setControlPanel (ControlPanel controlPanel) {
@@ -59,7 +67,7 @@ public class VicsekViewParamPanel extends JPanel {
     }
 
     public void updateVicsekRadius(double r) {
-        radiusLabel.setText("Field View Radius : " + r);
+        radiusLabel.setText("Visual field radius : " + r);
     }
 
     public void updateVicsekEta(double eta) {
@@ -68,6 +76,10 @@ public class VicsekViewParamPanel extends JPanel {
 
     public void updateVicsekSpeed(double speed) {
         speedLabel.setText("Bird speed : " + speed);
+    }
+
+    public void updateBoundaryMode(BoundaryMode mode) {
+        boundaryModeLabel.setText("Boundary mode : " + mode.name());
     }
 
 }
