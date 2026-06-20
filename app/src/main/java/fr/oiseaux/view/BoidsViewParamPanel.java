@@ -38,11 +38,15 @@ public class BoidsViewParamPanel extends JPanel {
     JPanel cohesionWeightPanel = new JPanel();
     JLabel cohesionWeightLabel = new JLabel();
 
+    //obstacle avoidance range panel
+    JPanel obstacleAvoidanceRangePanel = new JPanel();
+    JLabel obstacleAvoidanceRangeLabel = new JLabel();
+
     JPanel boundaryModePanel = new JPanel();
     JLabel boundaryModeLabel = new JLabel();
 
     public BoidsViewParamPanel() {
-        setLayout(new GridLayout(7, 1));
+        setLayout(new GridLayout(9, 1));
 
         //title
         titleLabel.setText("Boids Parameters");
@@ -75,6 +79,11 @@ public class BoidsViewParamPanel extends JPanel {
         cohesionWeightPanel.add(cohesionWeightLabel);
         add(cohesionWeightPanel);
 
+        //obstacle detection range
+        obstacleAvoidanceRangeLabel.setText("Obstacle detection range : 25.0");
+        obstacleAvoidanceRangePanel.add(obstacleAvoidanceRangeLabel);
+        add(obstacleAvoidanceRangePanel);
+
         boundaryModeLabel.setText("Boundary mode : CLOSED_BOX");
         boundaryModePanel.add(boundaryModeLabel);
         add(boundaryModePanel);
@@ -98,6 +107,10 @@ public class BoidsViewParamPanel extends JPanel {
 
     public void updateBoidsCohesionWeight(double wc) {
         cohesionWeightLabel.setText("Cohesion weight : " + wc);
+    }
+
+    public void updateBoidsObstacleAvoidanceRange(double range) {
+        obstacleAvoidanceRangeLabel.setText("Obstacle detection range : " + range);
     }
 
     public void updateBoundaryMode(BoundaryMode mode) {

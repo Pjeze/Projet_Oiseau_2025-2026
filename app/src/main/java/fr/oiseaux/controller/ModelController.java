@@ -42,7 +42,7 @@ public class ModelController {
 
   public ModelController(VicsekModel vicModel, BoidsModel bdsModel, MainWindow wdw, SimulationPanel viewSim, ControlPanel viewCtrl) {
     //model
-    this.model = vicModel;
+    this.model = bdsModel;
     this.vicsekModel = vicModel;
     this.boidsModel = bdsModel;
 
@@ -80,7 +80,11 @@ public class ModelController {
     initBoidsSeparationWeightSliderListener();
     initBoidsAlignmentWeightSliderListener();
     initBoidsCohesionWeightSliderListener();
+    initBoidsObstacleAvoidanceRangeSliderListener();
     initBoidsBoundaryModeComboBoxListener();
+
+    //VicsekListener
+    initVicsekObstacleAvoidanceRangeSliderListener();
 
   }
 
@@ -88,21 +92,64 @@ public class ModelController {
   private void initRootButtonListeners() {
 
     viewCtrl.submitButton.addActionListener(e -> {
-      try {
-        String raw = viewCtrl.birdNumberField.getText().trim();
-        if (raw.isEmpty()) {
-          return;
-        }
-        int val = Integer.parseInt(raw.replaceAll("\\s", ""));
-        if (val < 1) {
-          return;
-        }
-        model.setBirdNumber(val);
-        viewCtrl.updateBirdNumber(model.getBirdNumber());
+        // --- NEW CODE: OBSTACLE SHAPE CHANGE ---
+                int selectedShape = 0; // Default to Cube
+
+                // Try to read the shape from the visible panel (preferred),
+                // then fall back to the current model if needed.
+                try {
+                  if (viewCtrl.getVicsekControlPanel() != null && viewCtrl.getVicsekControlPanel().isShowing()) {
+                    selectedShape = viewCtrl.getVicsekControlPanel().obstacleShapeComboBox.getSelectedIndex();
+                  } else if (viewCtrl.getBoidsControlPanel() != null && viewCtrl.getBoidsControlPanel().isShowing()) {
+                    selectedShape = viewCtrl.getBoidsControlPanel().obstacleShapeComboBox.getSelectedIndex();
+                  } else {
+                    // Fallback: use current model state
+                    if (model instanceof fr.oiseaux.model.VicsekModel) {
+                      selectedShape = viewCtrl.getVicsekControlPanel().obstacleShapeComboBox.getSelectedIndex();
+                    } else {
+                      selectedShape = viewCtrl.getBoidsControlPanel().obstacleShapeComboBox.getSelectedIndex();
+                    }
+                  }
+                } catch (Exception ex) {
+                  // In case of unexpected error, keep default value and log
+                  System.err.println("Error reading obstacle shape: " + ex.getMessage());
+                  selectedShape = 0;
+                }
+              
+             
+              
+                // Update obstacle: if "None" (index 0) clear the list,
+                // otherwise add the chosen shape (model types start at 0 for Cube)
+                if (model.getObstacles() != null) {
+                  model.getObstacles().clear();
+                  if (selectedShape != 0) {
+                    int type = selectedShape - 1; // shift index because 0 == None
+                    double obsX = 50.0;
+                    double obsY = 50.0;
+                    double obsZ = 50.0;
+                    if (type == 2) {
+                      // Cone: position 50, 50, 0
+                      obsZ = 0.0;
+                    }
+                    model.getObstacles().add(new fr.oiseaux.model.Obstacles(obsX, obsY, obsZ, 30.0, type));
+                  }
+                }
+              // --------------------------------------------------------
+        try {
+          String raw = viewCtrl.birdNumberField.getText().trim();
+          if (raw.isEmpty()) {
+            return;
+          }
+          int val = Integer.parseInt(raw.replaceAll("\\s", ""));
+          if (val < 1) {
+            return;
+          }
+          model.setBirdNumber(val);
+          viewCtrl.updateBirdNumber(model.getBirdNumber());
         viewCtrl.birdNumberField.setValue(null);
         viewSim.repaint();
       } catch (NumberFormatException ex) {
-        System.out.println("Nombre Invalide");
+        System.out.println("Invalid number");
       }
     });
 
@@ -190,25 +237,38 @@ public class ModelController {
 
     this.viewVicsekViewParam.updateVicsekSpeed(this.vicsekModel.getSpeed());
   }
-  
+
+  private void initVicsekObstacleAvoidanceRangeSliderListener() {
+    this.viewVicsekCtrl.obstacleAvoidanceRangeSlider.addChangeListener((ChangeEvent e) -> {
+      JSlider source = (JSlider) e.getSource();
+      if (!source.getValueIsAdjusting()) {
+        double val = this.viewVicsekCtrl.obstacleAvoidanceRangeSlider.getValue();
+        this.vicsekModel.setObstacleAvoidanceRange(val);
+        this.viewVicsekViewParam.updateVicsekObstacleAvoidanceRange(this.vicsekModel.getObstacleAvoidanceRange());
+        viewSim.repaint();
+      }
+    });
+    this.viewVicsekViewParam.updateVicsekObstacleAvoidanceRange(this.vicsekModel.getObstacleAvoidanceRange());
+  }
+
   //BoundaryMode Vicsek
   private void initVicsekBoundaryModeComboBoxListener() {
 
     this.viewVicsekCtrl.boundaryModeComboBox.addActionListener(e -> {
-        // 1. Récupérer le mode sélectionné
+        // 1. Get the selected mode
         BoundaryMode mode = (BoundaryMode) this.viewVicsekCtrl.boundaryModeComboBox.getSelectedItem();
         
-        // 2. L'appliquer au modèle Vicsek
+        // 2. Apply it to the Vicsek model
         this.vicsekModel.setBoundaryMode(mode);
         
-        // 3. Mettre à jour l'affichage textuel
+        // 3. Update the text display
         this.viewVicsekViewParam.updateBoundaryMode(this.vicsekModel.getBoundaryMode());
         
-        // 4. Rafraîchir la vue 3D
+        // 4. Refresh the 3D view
         viewSim.repaint();
     });
 
-    // Synchronisation de l'affichage textuel à l'allumage
+    // Sync text display at startup
     this.viewVicsekViewParam.updateBoundaryMode(this.vicsekModel.getBoundaryMode());
   }
 
@@ -304,24 +364,37 @@ public class ModelController {
     this.viewBoidsViewParam.updateBoidsCohesionWeight(this.boidsModel.getCohesionWeight());
   }
 
+  private void initBoidsObstacleAvoidanceRangeSliderListener() {
+    this.viewBoidsCtrl.obstacleAvoidanceRangeSlider.addChangeListener((ChangeEvent e) -> {
+      JSlider source = (JSlider) e.getSource();
+      if (!source.getValueIsAdjusting()) {
+        double val = this.viewBoidsCtrl.obstacleAvoidanceRangeSlider.getValue();
+        this.boidsModel.setObstacleAvoidanceRange(val);
+        this.viewBoidsViewParam.updateBoidsObstacleAvoidanceRange(this.boidsModel.getObstacleAvoidanceRange());
+        viewSim.repaint();
+      }
+    });
+    this.viewBoidsViewParam.updateBoidsObstacleAvoidanceRange(this.boidsModel.getObstacleAvoidanceRange());
+  }
+
 //BoundaryMode
 private void initBoidsBoundaryModeComboBoxListener() {
 
     this.viewBoidsCtrl.boundaryModeComboBox.addActionListener(e -> {
-        // 1. Récupérer la valeur choisie dans la liste déroulante
+        // 1. Get the selected boundary mode
         BoundaryMode mode = (BoundaryMode) this.viewBoidsCtrl.boundaryModeComboBox.getSelectedItem();
         
-        // 2. Mettre à jour le modèle
+        // 2. Update the model
         this.boidsModel.setBoundaryMode(mode);
         
-        // 3. Mettre à jour l'affichage texte
+        // 3. Update text display
         this.viewBoidsViewParam.updateBoundaryMode(this.boidsModel.getBoundaryMode());
         
-        // 4. Redessiner
+        // 4. Redraw
         viewSim.repaint();
     });
 
-    // Initialisation de l'affichage au démarrage
+    // Initialize display at startup
     this.viewBoidsViewParam.updateBoundaryMode(this.boidsModel.getBoundaryMode());
   }
 

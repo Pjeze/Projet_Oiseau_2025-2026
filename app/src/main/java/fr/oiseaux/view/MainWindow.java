@@ -24,7 +24,7 @@ public class MainWindow extends JFrame {
     int screenWidth = (int) screenSize.getWidth();
     int screenHeight = (int) screenSize.getHeight();
 
-    setTitle("Oiseaux");
+    setTitle("Bird Simulation");
     setExtendedState(JFrame.MAXIMIZED_BOTH);
     setSize(screenWidth, screenHeight);
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

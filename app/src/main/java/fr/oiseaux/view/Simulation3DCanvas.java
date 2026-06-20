@@ -4,6 +4,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
 
+import com.jogamp.opengl.util.gl2.GLUT;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.GLAutoDrawable;
 import com.jogamp.opengl.GLCapabilities;
@@ -109,6 +110,7 @@ public class Simulation3DCanvas extends GLJPanel implements GLEventListener {
             0, 1, 0                     // up vector
         );
 
+       
         gl.glTranslatef(worldSize/2, worldSize/2, 0);
         gl.glRotatef(rotX, 1, 0, 0);
         gl.glRotatef(rotY, 0, 0, 1);
@@ -124,6 +126,30 @@ public class Simulation3DCanvas extends GLJPanel implements GLEventListener {
                 drawBird(gl, b, isBoids);
             }
         }
+         // Check that the model contains obstacles
+if (model.getObstacles() != null) {
+        com.jogamp.opengl.util.gl2.GLUT glut = new com.jogamp.opengl.util.gl2.GLUT();
+        for (fr.oiseaux.model.Obstacles obs : model.getObstacles()) {
+            gl.glPushMatrix();
+            gl.glTranslated(obs.getX(), obs.getY(), obs.getZ());
+            gl.glColor3f(1.0f, 0.0f, 0.0f); // Red
+
+            // Choose shape based on type
+            switch (obs.getType()) {
+                case 0: // CUBE
+                    glut.glutSolidCube((float) obs.getSize());
+                    break;
+                case 1: // SPHERE
+                    // Set radius (size / 2) and detail (16 slices)
+                    glut.glutSolidSphere((float) obs.getSize() / 2, 16, 16);
+                    break;
+                case 2: // Cone shape
+                    glut.glutSolidCone((float) obs.getSize() * 0.2f, (float) obs.getSize() * 2.5f, 32, 1);
+                    break;
+            }
+            gl.glPopMatrix();
+        }
+    }
     }
 
     private void drawBoundingBox(GL2 gl) {

@@ -4,6 +4,7 @@ import java.awt.BorderLayout;
 import java.awt.Font;
 import java.awt.GridLayout;
 
+import javax.swing.BorderFactory;
 import javax.swing.JComboBox;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -19,7 +20,7 @@ public class BoidsControlPanel extends JPanel {
     JLabel titleLabel = new JLabel("Boids Parameters");
 
     //core panel
-    JPanel corePanel = new JPanel(new GridLayout(6, 1));
+    JPanel corePanel = new JPanel(new GridLayout(0, 1, 6, 6));
 
     //Visual field radius panel
     JPanel radiusPanel = new JPanel(new GridLayout(2, 1));
@@ -41,15 +42,25 @@ public class BoidsControlPanel extends JPanel {
     JLabel alignmentWeightLabel = new JLabel("Alignment weight :");
     public JSlider alignmentWeightSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 6);
 
-    //separationWeight panel
+    //cohesionWeight panel
     JPanel cohesionWeightPanel = new JPanel(new GridLayout(2, 1));
     JLabel cohesionWeightLabel = new JLabel("Cohesion weight :");
     public JSlider cohesionWeightSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 4);
+
+
+    //Obstacle detection range panel
+    JPanel obstacleAvoidanceRangePanel = new JPanel(new GridLayout(2, 1));
+    JLabel obstacleAvoidanceRangeLabel = new JLabel("Obstacle detection range :");
+    public JSlider obstacleAvoidanceRangeSlider = new JSlider(JSlider.HORIZONTAL, 2, 25, 18);
 
     //BoundaryMode panel
     JPanel boundaryModePanel = new JPanel(new GridLayout(2, 1));
     JLabel boundaryModeLabel = new JLabel("Boundary Mode : ");
     public JComboBox<BoundaryMode> boundaryModeComboBox = new JComboBox<>(BoundaryMode.values());
+   // New elements for obstacle shape choice
+    JPanel obstacleShapePanel = new JPanel();
+    JLabel obstacleShapeLabel = new JLabel("Obstacle shape :");
+    public JComboBox<String> obstacleShapeComboBox = new JComboBox<>(new String[]{"None", "Cube", "Sphere", "Cone"});
 
     public BoidsControlPanel() {
         setLayout(new BorderLayout());
@@ -109,13 +120,31 @@ public class BoidsControlPanel extends JPanel {
         cohesionWeightPanel.add(cohesionWeightSlider);
         corePanel.add(cohesionWeightPanel);
 
+        //obstacleAvoidanceRange
+        obstacleAvoidanceRangeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        obstacleAvoidanceRangePanel.add(obstacleAvoidanceRangeLabel);
+        obstacleAvoidanceRangeSlider.setMajorTickSpacing(5);
+        obstacleAvoidanceRangeSlider.setMinorTickSpacing(1);
+        obstacleAvoidanceRangeSlider.setPaintTicks(true);
+        obstacleAvoidanceRangeSlider.setPaintLabels(false);
+        obstacleAvoidanceRangePanel.add(obstacleAvoidanceRangeSlider);
+        corePanel.add(obstacleAvoidanceRangePanel);
+
         //boundaryMode
         boundaryModeLabel.setHorizontalAlignment(SwingConstants.CENTER);
         boundaryModePanel.add(boundaryModeLabel);
         boundaryModePanel.add(boundaryModeComboBox);
         corePanel.add(boundaryModePanel);
 
+JPanel obstacleShapePanel = new JPanel();
+JLabel obstacleShapeLabel = new JLabel("Obstacle shape :");
+obstacleShapePanel.add(obstacleShapeLabel);
+obstacleShapePanel.add(obstacleShapeComboBox);
 
+// Add the panel to the main Boids control panel
+        corePanel.add(obstacleShapePanel);
+
+        corePanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
 
         //add to panel
         add(titlePanel, BorderLayout.NORTH);
