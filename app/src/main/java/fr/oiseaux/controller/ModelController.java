@@ -18,6 +18,8 @@ import fr.oiseaux.view.SimulationPanel;
 import fr.oiseaux.view.VicsekControlPanel;
 import fr.oiseaux.view.VicsekViewParamPanel;
 
+import fr.oiseaux.model.BoundaryMode;
+
 public class ModelController {
   //model
   public BirdModel model;
@@ -70,6 +72,7 @@ public class ModelController {
     initVicsekRadiusSliderListener();
     initVicsekEtaSliderListener();
     initVicsekSpeedSliderListener();
+    initVicsekBoundaryModeComboBoxListener();
 
     //BoidsListener
     initBoidsRadiusSliderListener();
@@ -77,6 +80,7 @@ public class ModelController {
     initBoidsSeparationWeightSliderListener();
     initBoidsAlignmentWeightSliderListener();
     initBoidsCohesionWeightSliderListener();
+    initBoidsBoundaryModeComboBoxListener();
 
   }
 
@@ -186,6 +190,27 @@ public class ModelController {
 
     this.viewVicsekViewParam.updateVicsekSpeed(this.vicsekModel.getSpeed());
   }
+  
+  //BoundaryMode Vicsek
+  private void initVicsekBoundaryModeComboBoxListener() {
+
+    this.viewVicsekCtrl.boundaryModeComboBox.addActionListener(e -> {
+        // 1. Récupérer le mode sélectionné
+        BoundaryMode mode = (BoundaryMode) this.viewVicsekCtrl.boundaryModeComboBox.getSelectedItem();
+        
+        // 2. L'appliquer au modèle Vicsek
+        this.vicsekModel.setBoundaryMode(mode);
+        
+        // 3. Mettre à jour l'affichage textuel
+        this.viewVicsekViewParam.updateBoundaryMode(this.vicsekModel.getBoundaryMode());
+        
+        // 4. Rafraîchir la vue 3D
+        viewSim.repaint();
+    });
+
+    // Synchronisation de l'affichage textuel à l'allumage
+    this.viewVicsekViewParam.updateBoundaryMode(this.vicsekModel.getBoundaryMode());
+  }
 
   /////////////////////////Boids Listeners///////////////////////////
   
@@ -277,6 +302,27 @@ public class ModelController {
     });
 
     this.viewBoidsViewParam.updateBoidsCohesionWeight(this.boidsModel.getCohesionWeight());
+  }
+
+//BoundaryMode
+private void initBoidsBoundaryModeComboBoxListener() {
+
+    this.viewBoidsCtrl.boundaryModeComboBox.addActionListener(e -> {
+        // 1. Récupérer la valeur choisie dans la liste déroulante
+        BoundaryMode mode = (BoundaryMode) this.viewBoidsCtrl.boundaryModeComboBox.getSelectedItem();
+        
+        // 2. Mettre à jour le modèle
+        this.boidsModel.setBoundaryMode(mode);
+        
+        // 3. Mettre à jour l'affichage texte
+        this.viewBoidsViewParam.updateBoundaryMode(this.boidsModel.getBoundaryMode());
+        
+        // 4. Redessiner
+        viewSim.repaint();
+    });
+
+    // Initialisation de l'affichage au démarrage
+    this.viewBoidsViewParam.updateBoundaryMode(this.boidsModel.getBoundaryMode());
   }
 
   //Logic

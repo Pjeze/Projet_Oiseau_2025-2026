@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.SwingConstants;
 
 import fr.oiseaux.model.VicsekModel;
+import fr.oiseaux.model.BoundaryMode;
 
 public class BoidsViewParamPanel extends JPanel {
 
@@ -37,8 +38,11 @@ public class BoidsViewParamPanel extends JPanel {
     JPanel cohesionWeightPanel = new JPanel();
     JLabel cohesionWeightLabel = new JLabel();
 
+    JPanel boundaryModePanel = new JPanel();
+    JLabel boundaryModeLabel = new JLabel();
+
     public BoidsViewParamPanel() {
-        setLayout(new GridLayout(6, 1));
+        setLayout(new GridLayout(7, 1));
 
         //title
         titleLabel.setText("Boids Parameters");
@@ -70,14 +74,18 @@ public class BoidsViewParamPanel extends JPanel {
         cohesionWeightLabel.setText("Cohesion weight : 0.4");
         cohesionWeightPanel.add(cohesionWeightLabel);
         add(cohesionWeightPanel);
+
+        boundaryModeLabel.setText("Boundary mode : CLOSED_BOX");
+        boundaryModePanel.add(boundaryModeLabel);
+        add(boundaryModePanel);
     }
 
     public void updateBoidsRadius(double r) {
-        radiusLabel.setText("Field View Radius : " + r);
+        radiusLabel.setText("Visual Field Radius : " + r);
     }
     
     public void updateSeparationRadius(double rs) {
-        separationRadiusLabel.setText("Field View Radius : " + rs);
+        separationRadiusLabel.setText("Separation Radius : " + rs);
     }
 
     public void updateBoidsSeparationWeight(double ws) {
@@ -90,5 +98,9 @@ public class BoidsViewParamPanel extends JPanel {
 
     public void updateBoidsCohesionWeight(double wc) {
         cohesionWeightLabel.setText("Cohesion weight : " + wc);
+    }
+
+    public void updateBoundaryMode(BoundaryMode mode) {
+        boundaryModeLabel.setText("Boundary mode : " + mode.name());
     }
 }
