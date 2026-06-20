@@ -91,7 +91,7 @@ public class Simulation3DCanvas extends GLJPanel implements GLEventListener {
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_DIFFUSE, lightColor, 0);
         gl.glLightfv(GL2.GL_LIGHT0, GL2.GL_AMBIENT, ambient, 0);
 
-        gl.glClearColor(0.05f, 0.05f, 0.1f, 1f); // dark blue background
+        gl.glClearColor(1f, 1f, 1f, 1f); // dark blue background
 
     }
 

@@ -21,8 +21,10 @@ public class KDTree3D {
 
   private final double[][] points;
   private final Node root;
+  private final BoundaryMode mode;
 
-  public KDTree3D(List<Bird> birds) {
+  public KDTree3D(List<Bird> birds, BoundaryMode mode) {
+    this.mode = mode;
     int n = birds.size();
     points = new double[n][3];
     for (int i = 0; i < n; i++) {
@@ -74,9 +76,9 @@ public class KDTree3D {
       return;
     }
 
-    double dx = wrapDiff(qx, points[node.index][0]);
-    double dy = wrapDiff(qy, points[node.index][1]);
-    double dz = wrapDiff(qz, points[node.index][2]);
+    double dx = (mode == BoundaryMode.WRAPPED) ? wrapDiff(qx, points[node.index][0]) : (qx-points[node.index][0]);
+    double dy = (mode == BoundaryMode.WRAPPED) ? wrapDiff(qy, points[node.index][1]) : (qy-points[node.index][1]);
+    double dz = (mode == BoundaryMode.WRAPPED) ? wrapDiff(qz, points[node.index][2]) : (qz-points[node.index][2]);
     if (dx * dx + dy * dy + dz * dz <= radius2) {
       neighbors.add(node.index);
     }
@@ -98,7 +100,7 @@ public class KDTree3D {
       }
     }
 
-    double diff = wrapDiff(queryCoord, splitCoord);
+    double diff = (mode == BoundaryMode.WRAPPED) ? wrapDiff(queryCoord, splitCoord) : (queryCoord - splitCoord);
     Node near = diff <= 0 ? node.left : node.right;
     Node far = diff <= 0 ? node.right : node.left;
 
@@ -108,7 +110,7 @@ public class KDTree3D {
     }
   }
 
-  static double wrapDiff(double a, double b) {
+  public static double wrapDiff(double a, double b) {
     double diff = a - b;
     if (diff > HALF_BOX) {
       diff -= BOX_SIZE;

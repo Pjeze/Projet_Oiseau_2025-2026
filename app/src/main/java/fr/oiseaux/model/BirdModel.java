@@ -9,4 +9,8 @@ public interface BirdModel {
     void setBirdNumber(int n);
     void updateMovement();
 
+    void setBoundaryMode(BoundaryMode mode); 
+    BoundaryMode getBoundaryMode();
+    
+
 }
