@@ -48,7 +48,7 @@ public class ControlPanel extends JPanel {
             //birdNumber panel
             JPanel birdNumberPanel = new JPanel();
             JLabel birdNumberLabel = new JLabel("Enter bird number : ");
-            public JFormattedTextField birdNumberField = new JFormattedTextField(NumberFormat.getIntegerInstance());
+            public JFormattedTextField birdNumberField = new JFormattedTextField(createBirdNumberFormat());
 
             //modelControlPanel
             JPanel modelControlPanel = new JPanel();
@@ -104,7 +104,7 @@ public class ControlPanel extends JPanel {
             coreChangementPanel.setLayout(new BorderLayout());
 
               //birdNumber panel
-              birdNumberField.setColumns(4);
+              birdNumberField.setColumns(6);
               birdNumberPanel.add(birdNumberLabel);
               birdNumberPanel.add(birdNumberField);
               coreChangementPanel.add(birdNumberPanel, BorderLayout.NORTH);
@@ -205,6 +205,12 @@ public class ControlPanel extends JPanel {
   //update
   public void updateBirdNumber(int count) {
     charBirdNumberLabel.setText("Bird number : " + count);
+  }
+
+  private static NumberFormat createBirdNumberFormat() {
+    NumberFormat format = NumberFormat.getIntegerInstance();
+    format.setGroupingUsed(false);
+    return format;
   }
 
 }

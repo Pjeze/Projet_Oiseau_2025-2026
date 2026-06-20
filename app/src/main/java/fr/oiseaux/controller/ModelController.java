@@ -85,10 +85,17 @@ public class ModelController {
 
     viewCtrl.submitButton.addActionListener(e -> {
       try {
-        int val = Integer.parseInt(viewCtrl.birdNumberField.getText());
+        String raw = viewCtrl.birdNumberField.getText().trim();
+        if (raw.isEmpty()) {
+          return;
+        }
+        int val = Integer.parseInt(raw.replaceAll("\\s", ""));
+        if (val < 1) {
+          return;
+        }
         model.setBirdNumber(val);
         viewCtrl.updateBirdNumber(model.getBirdNumber());
-        viewCtrl.birdNumberField.setText("");
+        viewCtrl.birdNumberField.setValue(null);
         viewSim.repaint();
       } catch (NumberFormatException ex) {
         System.out.println("Nombre Invalide");
@@ -147,15 +154,19 @@ public class ModelController {
       JSlider source = (JSlider) e.getSource();
 
       if (!source.getValueIsAdjusting()) {
-        double val = this.viewVicsekCtrl.etaSlider.getValue();
-        this.vicsekModel.setEta(val * 1E-5);
+        this.vicsekModel.setEta(etaFromSlider(this.viewVicsekCtrl.etaSlider.getValue()));
         this.viewVicsekViewParam.updateVicsekEta(this.vicsekModel.getEta());
         viewSim.repaint();
       }
       
     });
 
+    this.vicsekModel.setEta(etaFromSlider(this.viewVicsekCtrl.etaSlider.getValue()));
     this.viewVicsekViewParam.updateVicsekEta(this.vicsekModel.getEta());
+  }
+
+  private static double etaFromSlider(int sliderValue) {
+    return Math.toRadians(sliderValue);
   }
 
   //speed

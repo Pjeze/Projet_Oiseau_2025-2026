@@ -3,6 +3,7 @@ package fr.oiseaux.model;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.lang.Math;
 
 public class VicsekModel implements BirdModel {
   public double radius;
@@ -71,44 +72,15 @@ public class VicsekModel implements BirdModel {
 
   @Override
   public void updateMovement() {
+    KDTree3D tree = new KDTree3D(birds);
     List<Vector3D> tabVelocities = new ArrayList<>(birds.size());
-    for (Bird b : birds) {
+    for (int i = 0; i < birds.size(); i++) {
+      Bird b = birds.get(i);
       Vector3D vSum = new Vector3D(0, 0, 0);
-      for (Bird c : birds) {
-        Vector3D diff = Vector3D.minus(b.pos, c.pos);
-        if (diff.x() > 50)
-          diff.setX(100 - diff.x());
-        if (diff.x() < -50)
-          diff.setX(diff.x() + 100);
-
-        if (diff.y() > 50)
-          diff.setY(100 - diff.y());
-        if (diff.y() < -50)
-          diff.setY(diff.y() + 100);
-
-        if (diff.z() > 50)
-          diff.setZ(100 - diff.z());
-        if (diff.z() < -50)
-          diff.setZ(diff.z() + 100);
-
-        if (diff.norm2() <= radius * radius) {
-          vSum = Vector3D.add(vSum, c.velocity);
-        }
+      for (int neighborIndex : tree.radiusSearch(b.pos.x(), b.pos.y(), b.pos.z(), radius)) {
+        vSum = Vector3D.add(vSum, birds.get(neighborIndex).velocity);
       }
-      Vector3D randomNoise = new Vector3D(
-                (random.nextDouble()-0.5)*2,
-                (random.nextDouble()-0.5)*2,
-                (random.nextDouble()-0.5)*2
-              );
-      while (randomNoise.norm2() > 1.0) {
-          randomNoise = new Vector3D(
-            (random.nextDouble()-0.5)*2,
-            (random.nextDouble()-0.5)*2,
-            (random.nextDouble()-0.5)*2
-          );
-      }
-      randomNoise = randomNoise.normalize();
-      Vector3D newVelocity = Vector3D.add(vSum, randomNoise.scale(eta)).normalize().scale(v0);
+      Vector3D newVelocity = applyVicsekNoise(vSum, b.velocity).scale(v0);
       tabVelocities.add(newVelocity);
       b.pos = Vector3D.add(b.pos, newVelocity);
       if (b.pos.x() > 100)
@@ -127,5 +99,51 @@ public class VicsekModel implements BirdModel {
     for (int i = 0; i < birds.size(); i++) {
       birds.get(i).velocity = tabVelocities.get(i);
     }
+  }
+
+  private Vector3D applyVicsekNoise(Vector3D neighborVelocitySum, Vector3D currentVelocity) {
+    Vector3D baseDirection = neighborVelocitySum.norm2() > 1e-12
+        ? neighborVelocitySum
+        : currentVelocity;
+    if (baseDirection.norm2() < 1e-12) {
+      baseDirection = randomUnitVector();
+    } else {
+      baseDirection = baseDirection.normalize();
+    }
+
+    if (eta <= 0.0) {
+      return baseDirection;
+    }
+
+    double angle = (random.nextDouble() * 2.0 - 1.0) * eta;
+    Vector3D axis = randomPerpendicularUnit(baseDirection);
+    return rotateAroundAxis(baseDirection, axis, angle);
+  }
+
+  private Vector3D randomUnitVector() {
+    Vector3D vector;
+    do {
+      vector = new Vector3D(
+          random.nextDouble() * 2.0 - 1.0,
+          random.nextDouble() * 2.0 - 1.0,
+          random.nextDouble() * 2.0 - 1.0);
+    } while (vector.norm2() > 1.0 || vector.norm2() < 1e-12);
+    return vector.normalize();
+  }
+
+  private Vector3D randomPerpendicularUnit(Vector3D direction) {
+    Vector3D reference = Math.abs(direction.x()) < 0.9
+        ? new Vector3D(1, 0, 0)
+        : new Vector3D(0, 1, 0);
+    return Vector3D.cross(direction, reference).normalize();
+  }
+
+  private Vector3D rotateAroundAxis(Vector3D vector, Vector3D axis, double angle) {
+    double cos = Math.cos(angle);
+    double sin = Math.sin(angle);
+    Vector3D rotated = Vector3D.add(
+        vector.scale(cos),
+        Vector3D.cross(axis, vector).scale(sin));
+    return rotated.normalize();
   }
 }

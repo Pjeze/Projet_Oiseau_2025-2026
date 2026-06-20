@@ -27,8 +27,8 @@ public class VicsekControlPanel extends JPanel {
 
     //eta (Interference) panel 
     JPanel etaPanel = new JPanel(new GridLayout(2, 1));
-    JLabel etaLabel = new JLabel("Random noise (x 1E-5):");
-    public JSlider etaSlider = new JSlider(JSlider.HORIZONTAL, 1, 51, 25);
+    JLabel etaLabel = new JLabel("Random noise (degrees):");
+    public JSlider etaSlider = new JSlider(JSlider.HORIZONTAL, 0, 50, 10);
 
     //Speed panel
     JPanel speedPanel = new JPanel(new GridLayout(2, 1));

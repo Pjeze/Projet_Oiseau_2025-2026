@@ -26,7 +26,7 @@ public class App {
       SimulationPanel simPanel = new SimulationPanel();
       ControlPanel ctrlPanel = new ControlPanel();
 
-      VicsekModel vicsekModel = new VicsekModel(8, 0.0001, 0.23);
+      VicsekModel vicsekModel = new VicsekModel(8, Math.toRadians(10), 0.23);
       BoidsModel boidsModel = new BoidsModel(12, 4, 0.23);
 
       MainWindow window = new MainWindow(simPanel, ctrlPanel);
