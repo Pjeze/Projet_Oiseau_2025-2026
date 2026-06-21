@@ -14,12 +14,11 @@ public class BoidsModel implements BirdModel {
     public double separationWeight = 1.2;
     public double alignmentWeight = 0.6;
     public double cohesionWeight = 0.4;
-    public double obstacleAvoidanceRange = 25.0;
 
     private int birdNumber = 5;
     private List<Bird> birds;
     private Random random = new Random();
-    private List<Obstacles> obstacleList = new ArrayList<>();
+
     private BoundaryMode boundaryMode = BoundaryMode.CLOSED_BOX;
 
     public BoidsModel(double radius, double separationRadius, double v0) {
@@ -89,13 +88,6 @@ public class BoidsModel implements BirdModel {
     }
     public double getCohesionWeight() {
         return this.cohesionWeight;
-    }
-
-    public void setObstacleAvoidanceRange(double n) {
-        this.obstacleAvoidanceRange = n;
-    }
-    public double getObstacleAvoidanceRange() {
-        return this.obstacleAvoidanceRange;
     }
 
     public void setBoundaryMode(BoundaryMode mode) {this.boundaryMode = mode;}
@@ -192,8 +184,6 @@ public class BoidsModel implements BirdModel {
             forceX += (random.nextDouble() - 0.5) * 0.01;
             forceY += (random.nextDouble() - 0.5) * 0.01;
             forceZ += (random.nextDouble() - 0.5) * 0.01;
-            // Obstacle avoidance is now handled as a minimal trajectory correction
-            // after the normal Boids forces are computed.
 
             if (boundaryMode == BoundaryMode.CLOSED_BOX) {
                 double wallThreshold = 15.0;
@@ -242,43 +232,6 @@ public class BoidsModel implements BirdModel {
             double newVy = birdi.velocity.y() + forceY * dt;
             double newVz = birdi.velocity.z() + forceZ * dt;
 
-            Vector3D newVelocity = new Vector3D(newVx, newVy, newVz);
-            if (this.obstacleList != null) {
-                for (Obstacles obs : this.obstacleList) {
-                    double dx = birdi.pos.x() - obs.getX();
-                    double dy = birdi.pos.y() - obs.getY();
-                    double dz = birdi.pos.z() - obs.getZ();
-                    double xyDist = Math.sqrt(dx * dx + dy * dy);
-
-                    double obstacleRadius;
-                    if (obs.getType() == 2) {
-                        double coneHeight = obs.getSize() * 2.5;
-                        double baseRadius = obs.getSize() * 0.2;
-                        if (dz >= 0 && dz <= coneHeight) {
-                            obstacleRadius = baseRadius * (dz / coneHeight);
-                        } else {
-                            obstacleRadius = 0;
-                        }
-                    } else {
-                        obstacleRadius = obs.getSize() / 2.0;
-                    }
-
-                    double dist = (obs.getType() == 2) ? xyDist : Math.sqrt(dx * dx + dy * dy + dz * dz);
-                    double detectionThreshold = obstacleRadius + this.obstacleAvoidanceRange;
-                    double distanceFactor = Math.max(0.0, detectionThreshold - dist) / detectionThreshold;
-
-                    if (dist < detectionThreshold && dist > 0.1) {
-                        Vector3D away = new Vector3D(dx / dist, dy / dist, dz / dist);
-                        double blend = distanceFactor;
-                        newVelocity = Vector3D.blendToTangent(newVelocity, away, blend);
-                    }
-                }
-            }
-
-            newVx = newVelocity.x();
-            newVy = newVelocity.y();
-            newVz = newVelocity.z();
-
             // Limit speed
             double speed = Math.sqrt(newVx * newVx + newVy * newVy + newVz * newVz);
             if (speed > maxSpeed && speed > 0) {
@@ -319,9 +272,5 @@ public class BoidsModel implements BirdModel {
         if (diff.z() > 50)  diff.setZ(diff.z() - 100);
         if (diff.z() < -50) diff.setZ(diff.z() + 100);
         return diff;
-    }
-    @Override
-    public List<Obstacles> getObstacles() {
-        return this.obstacleList;
     }
 }

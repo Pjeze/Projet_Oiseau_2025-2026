@@ -30,20 +30,11 @@ public class VicsekViewParamPanel extends JPanel {
     JPanel speedPanel = new JPanel();
     JLabel speedLabel = new JLabel();
 
-    //obstacle avoidance range panel
-    JPanel obstacleAvoidanceRangePanel = new JPanel();
-    JLabel obstacleAvoidanceRangeLabel = new JLabel();
-    
-    // obstacle size panel
-    JPanel obstacleSizePanel = new JPanel();
-    JLabel obstacleSizeLabel = new JLabel();
-
     JPanel boundaryModePanel = new JPanel();
     JLabel boundaryModeLabel = new JLabel();
-    
 
     public VicsekViewParamPanel() {
-        setLayout(new GridLayout(7, 1));
+        setLayout(new GridLayout(5, 1));
 
         //title
         titleLabel.setText("Vicsek Parameters");
@@ -66,15 +57,6 @@ public class VicsekViewParamPanel extends JPanel {
         speedPanel.add(speedLabel);
         add(speedPanel);
 
-        //obstacle detection range
-        obstacleAvoidanceRangeLabel.setText("Obstacle detection range : 20.0");
-        obstacleAvoidanceRangePanel.add(obstacleAvoidanceRangeLabel);
-        add(obstacleAvoidanceRangePanel);
-
-        obstacleSizeLabel.setText("Obstacle size : 30.0");
-        obstacleSizePanel.add(obstacleSizeLabel);
-        add(obstacleSizePanel);
-
         boundaryModeLabel.setText("Boundary mode : CLOSED_BOX");
         boundaryModePanel.add(boundaryModeLabel);
         add(boundaryModePanel);
@@ -94,14 +76,6 @@ public class VicsekViewParamPanel extends JPanel {
 
     public void updateVicsekSpeed(double speed) {
         speedLabel.setText("Bird speed : " + speed);
-    }
-
-    public void updateVicsekObstacleAvoidanceRange(double range) {
-        obstacleAvoidanceRangeLabel.setText("Obstacle detection range : " + range);
-    }
-
-    public void updateObstacleSize(double size) {
-        obstacleSizeLabel.setText("Obstacle size : " + size);
     }
 
     public void updateBoundaryMode(BoundaryMode mode) {
