@@ -6,6 +6,7 @@ public interface BirdModel {
     
     int getBirdNumber();
     List<Bird> getBirds();
+    List<Obstacles> getObstacles();
     void setBirdNumber(int n);
     void updateMovement();
 

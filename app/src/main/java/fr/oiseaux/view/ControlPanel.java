@@ -6,6 +6,7 @@ import java.awt.Font;
 import java.awt.Toolkit;
 import java.text.NumberFormat;
 
+import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
@@ -25,7 +26,7 @@ public class ControlPanel extends JPanel {
   int screenWidth = (int) screenSize.getWidth();
   int screenHeight = (int) screenSize.getHeight();
   //ctrlBoard
-  int ctrlWidth = (int) (screenWidth/5);
+  int ctrlWidth = Math.max(380, screenWidth/5);
   int ctrlHeight = (int) (screenHeight*0.9);
 
   //title panel
@@ -87,6 +88,11 @@ public class ControlPanel extends JPanel {
     titleLabel.setHorizontalAlignment(SwingConstants.CENTER);
     titleLabel.setFont( new Font( "Arial", Font.BOLD, 20));
     titlePanel.add(titleLabel);
+
+    setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+    corePanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
+    changementPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
+    characteristicsPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
 
     //core panel
     corePanel.setLayout(new BorderLayout());
