@@ -42,52 +42,11 @@ public class Vector3D {
   }
 
   public Vector3D normalize() {
-    double length = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
-    if (length == 0) {
-      return new Vector3D(0, 0, 0);
-    }
-    return this.scale(1.0 / length);
-  }
-
-  public double length() {
-    return Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
-  }
-
-  public static Vector3D orthogonal(Vector3D v) {
-    if (Math.abs(v.x()) < Math.abs(v.y()) && Math.abs(v.x()) < Math.abs(v.z())) {
-      return new Vector3D(0, -v.z(), v.y());
-    }
-    if (Math.abs(v.y()) < Math.abs(v.z())) {
-      return new Vector3D(-v.z(), 0, v.x());
-    }
-    return new Vector3D(-v.y(), v.x(), 0);
-  }
-
-  public static Vector3D blendToTangent(Vector3D velocity, Vector3D away, double blend) {
-    double speed = Math.sqrt(velocity.norm2());
-    if (speed == 0) {
-      return velocity;
-    }
-
-    Vector3D heading = velocity.scale(1.0 / speed);
-    double dot = Vector3D.dot(heading, away);
-    if (dot >= 0) {
-      return velocity;
-    }
-
-    Vector3D tangent = Vector3D.minus(heading, away.scale(dot));
-    double tangentLength = tangent.length();
-    if (tangentLength < 1e-8) {
-      tangent = Vector3D.orthogonal(away).normalize();
-    } else {
-      tangent = tangent.scale(1.0 / tangentLength);
-    }
-
-    double t = Math.max(0.0, Math.min(1.0, blend));
-    Vector3D correctedDirection = Vector3D.add(heading.scale(1.0 - t), tangent.scale(t));
-    correctedDirection = correctedDirection.normalize();
-
-    return correctedDirection.scale(speed);
+    double n2 = 1/Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z);
+    if (n2 == Double.NaN)
+      throw new ArithmeticException("Division par 0");
+    else
+      return this.scale(n2);
   }
 
   public static Vector3D add(Vector3D u, Vector3D v) {
@@ -103,10 +62,6 @@ public class Vector3D {
         u.y() * v.z() - u.z() * v.y(),
         u.z() * v.x() - u.x() * v.z(),
         u.x() * v.y() - u.y() * v.x());
-  }
-
-  public static double dot(Vector3D u, Vector3D v) {
-    return u.x * v.x + u.y * v.y + u.z * v.z;
   }
 
   public double norm2() {

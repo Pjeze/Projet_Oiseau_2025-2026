@@ -9,9 +9,7 @@ public class VicsekModel implements BirdModel {
   public double radius;
   public double eta;
   public double v0;
-  public double obstacleAvoidanceRange = 20.0;
   private int birdNumber = 5;
-  private List<Obstacles> obstacleList = new ArrayList<>();
   private List<Bird> birds;
   private Random random = new Random();
   private BoundaryMode boundaryMode = BoundaryMode.CLOSED_BOX;
@@ -26,66 +24,23 @@ public class VicsekModel implements BirdModel {
   }
 
   private void initBirds() {
-        while (birds.size() < birdNumber) {
-            // 1. Keep their way of generating initial direction
-            Vector3D v = new Vector3D(
-                random.nextDouble() - 0.5,
-                random.nextDouble() - 0.5,
-                random.nextDouble() - 0.5
-            );
-
-            double posX, posY, posZ;
-            boolean insideObstacle;
-
-            // 2. NEW CODE: secure random coordinate generation
-            do {
-                // Generate positions using their method
-                posX = random.nextInt(100);
-                posY = random.nextInt(100);
-                posZ = random.nextInt(100);
-
-                insideObstacle = false;
-
-                // Check against each obstacle
-                if (this.obstacleList != null) {
-                    for (Obstacles obs : this.obstacleList) {
-                        double dx = posX - obs.getX();
-                        double dy = posY - obs.getY();
-                        double dz = posZ - obs.getZ();
-                        double xyDist = Math.sqrt(dx * dx + dy * dy);
-
-                        double safeRadius;
-                        if (obs.getType() == 2) {
-                            double coneHeight = obs.getSize() * 2.5;
-                            double baseRadius = obs.getSize() * 0.2;
-                            if (dz >= 0 && dz <= coneHeight) {
-                                safeRadius = baseRadius * (dz / coneHeight);
-                            } else {
-                                safeRadius = 0;
-                            }
-                        } else {
-                            safeRadius = obs.getSize() / 2.0;
-                        }
-
-                        double dist = (obs.getType() == 2) ? xyDist : Math.sqrt(dx * dx + dy * dy + dz * dz);
-                        if (dist < safeRadius + 2.0) {
-                            insideObstacle = true;
-                            break; // Exit check and retry randomization
-                        }
-                    }
-                }
-            } while (insideObstacle); // If true, loop repeats and generates new coordinates
-
-            // 3. Finally create the bird with validated coordinates
-            Bird b = new Bird(new Vector3D(posX, posY, posZ), v.normalize().scale(v0));
-            birds.add(b);
-        }
-
-        // Code to remove extra birds (unchanged)
-        while (birds.size() > birdNumber) {
-            birds.remove(birds.size() - 1);
-        }
+    while (birds.size() < birdNumber) {
+      Vector3D v = new Vector3D(
+              random.nextDouble()-0.5,
+              random.nextDouble()-0.5,
+              random.nextDouble()-0.5);
+      Bird b = new Bird(new Vector3D(
+              random.nextInt(100),
+              random.nextInt(100),
+              random.nextInt(100)),
+          v.normalize().scale(v0)
+        );
+      birds.add(b);
     }
+    while (birds.size() > birdNumber) {
+      birds.remove(birds.size() - 1);
+    }
+  }
 
   //setter and getter for bird
   @Override
@@ -116,9 +71,6 @@ public class VicsekModel implements BirdModel {
   public void setSpeed(double n) { this.v0 = n; }
   public double getSpeed() { return this.v0; }
 
-  public void setObstacleAvoidanceRange(double n) { this.obstacleAvoidanceRange = n; }
-  public double getObstacleAvoidanceRange() { return this.obstacleAvoidanceRange; }
-
   public void setBoundaryMode(BoundaryMode mode) {this.boundaryMode = mode;}
   public BoundaryMode getBoundaryMode() {return this.boundaryMode;}
 
@@ -139,39 +91,8 @@ public class VicsekModel implements BirdModel {
       if (neigborCount > 0) {
         vSum = vSum.scale(1.0/neigborCount);
       }
-        if (this.obstacleList != null) {
-            for (Obstacles obs : this.obstacleList) {
-                double dx = b.pos.x() - obs.getX();
-                double dy = b.pos.y() - obs.getY();
-                double dz = b.pos.z() - obs.getZ();
-                double xyDist = Math.sqrt(dx * dx + dy * dy);
 
-                double obstacleRadius;
-                if (obs.getType() == 2) {
-                    double coneHeight = obs.getSize() * 2.5;
-                    double baseRadius = obs.getSize() * 0.2;
-                    if (dz >= 0 && dz <= coneHeight) {
-                        obstacleRadius = baseRadius * (dz / coneHeight);
-                    } else {
-                        obstacleRadius = 0;
-                    }
-                } else {
-                    obstacleRadius = obs.getSize() / 2.0;
-                }
-
-                double dist = (obs.getType() == 2) ? xyDist : Math.sqrt(dx * dx + dy * dy + dz * dz);
-                double detectionThreshold = obstacleRadius + this.obstacleAvoidanceRange;
-                double distanceFactor = Math.max(0.0, detectionThreshold - dist) / detectionThreshold;
-
-                if (dist < detectionThreshold && dist > 0.1) {
-                    Vector3D away = new Vector3D(dx / dist, dy / dist, dz / dist);
-                    double blend = distanceFactor;
-                    vSum = Vector3D.blendToTangent(vSum, away, blend);
-                }
-            }
-        }
       if (boundaryMode == BoundaryMode.CLOSED_BOX) {
-        
         double wallThreshold = 5.0;
         double WALL_FACTOR = 5.0;
 
@@ -262,7 +183,14 @@ public class VicsekModel implements BirdModel {
     Vector3D reference = Math.abs(direction.x()) < 0.9
         ? new Vector3D(1, 0, 0)
         : new Vector3D(0, 1, 0);
-    return Vector3D.cross(direction, reference).normalize();
+    Vector3D u = Vector3D.cross(direction, reference).normalize();
+    Vector3D v = Vector3D.cross(direction, u).normalize();
+
+    double randomAngle = random.nextDouble() * 2.0 *Math.PI;
+
+    Vector3D randomAxis = Vector3D.add(u.scale(Math.cos(randomAngle)), v.scale(Math.sin(randomAngle)));
+
+    return randomAxis.normalize();
   }
 
   private Vector3D rotateAroundAxis(Vector3D vector, Vector3D axis, double angle) {
@@ -273,9 +201,4 @@ public class VicsekModel implements BirdModel {
         Vector3D.cross(axis, vector).scale(sin));
     return rotated.normalize();
   }
-  @Override
-  public List<Obstacles> getObstacles() {
-    return this.obstacleList;
-  }
 }
-

@@ -28,7 +28,6 @@ public class App {
 
       VicsekModel vicsekModel = new VicsekModel(8, Math.toRadians(10), 0.23);
       BoidsModel boidsModel = new BoidsModel(12, 4, 0.23);
-      boidsModel.setBirdNumber(2000);
 
       MainWindow window = new MainWindow(simPanel, ctrlPanel);
 
