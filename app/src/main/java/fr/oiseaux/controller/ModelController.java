@@ -81,10 +81,12 @@ public class ModelController {
     initBoidsAlignmentWeightSliderListener();
     initBoidsCohesionWeightSliderListener();
     initBoidsObstacleAvoidanceRangeSliderListener();
+    initBoidsObstacleSizeSliderListener();
     initBoidsBoundaryModeComboBoxListener();
 
     //VicsekListener
     initVicsekObstacleAvoidanceRangeSliderListener();
+    initVicsekObstacleSizeSliderListener();
 
   }
 
@@ -131,7 +133,18 @@ public class ModelController {
                       // Cone: position 50, 50, 0
                       obsZ = 0.0;
                     }
-                    model.getObstacles().add(new fr.oiseaux.model.Obstacles(obsX, obsY, obsZ, 30.0, type));
+                    // Determine size from visible control panel slider (fallback 30.0)
+                    double obsSize = 30.0;
+                    try {
+                      if (viewCtrl.getVicsekControlPanel() != null && viewCtrl.getVicsekControlPanel().isShowing()) {
+                        obsSize = viewCtrl.getVicsekControlPanel().obstacleSizeSlider.getValue();
+                      } else if (viewCtrl.getBoidsControlPanel() != null && viewCtrl.getBoidsControlPanel().isShowing()) {
+                        obsSize = viewCtrl.getBoidsControlPanel().obstacleSizeSlider.getValue();
+                      }
+                    } catch (Exception ex) {
+                      // ignore and keep default
+                    }
+                    model.getObstacles().add(new fr.oiseaux.model.Obstacles(obsX, obsY, obsZ, obsSize, type));
                   }
                 }
               // --------------------------------------------------------
@@ -249,6 +262,26 @@ public class ModelController {
       }
     });
     this.viewVicsekViewParam.updateVicsekObstacleAvoidanceRange(this.vicsekModel.getObstacleAvoidanceRange());
+  }
+
+  private void initVicsekObstacleSizeSliderListener() {
+    this.viewVicsekCtrl.obstacleSizeSlider.addChangeListener((ChangeEvent e) -> {
+      JSlider source = (JSlider) e.getSource();
+      if (!source.getValueIsAdjusting()) {
+        double val = this.viewVicsekCtrl.obstacleSizeSlider.getValue();
+        // update existing obstacles of type cube or sphere
+        if (this.vicsekModel.getObstacles() != null) {
+          for (fr.oiseaux.model.Obstacles obs : this.vicsekModel.getObstacles()) {
+            if (obs.getType() == 0 || obs.getType() == 1) {
+              obs.setSize(val);
+            }
+          }
+        }
+        this.viewVicsekViewParam.updateObstacleSize(val);
+        viewSim.repaint();
+      }
+    });
+    this.viewVicsekViewParam.updateObstacleSize(this.viewVicsekCtrl.obstacleSizeSlider.getValue());
   }
 
   //BoundaryMode Vicsek
@@ -375,6 +408,25 @@ public class ModelController {
       }
     });
     this.viewBoidsViewParam.updateBoidsObstacleAvoidanceRange(this.boidsModel.getObstacleAvoidanceRange());
+  }
+
+  private void initBoidsObstacleSizeSliderListener() {
+    this.viewBoidsCtrl.obstacleSizeSlider.addChangeListener((ChangeEvent e) -> {
+      JSlider source = (JSlider) e.getSource();
+      if (!source.getValueIsAdjusting()) {
+        double val = this.viewBoidsCtrl.obstacleSizeSlider.getValue();
+        if (this.boidsModel.getObstacles() != null) {
+          for (fr.oiseaux.model.Obstacles obs : this.boidsModel.getObstacles()) {
+            if (obs.getType() == 0 || obs.getType() == 1) {
+              obs.setSize(val);
+            }
+          }
+        }
+        this.viewBoidsViewParam.updateObstacleSize(val);
+        viewSim.repaint();
+      }
+    });
+    this.viewBoidsViewParam.updateObstacleSize(this.viewBoidsCtrl.obstacleSizeSlider.getValue());
   }
 
 //BoundaryMode

@@ -17,4 +17,6 @@ public class Obstacles {
     public double getZ() { return z; }
     public double getSize() { return size; }
     public int getType() { return type; }
+
+    public void setSize(double size) { this.size = size; }
 }

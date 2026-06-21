@@ -33,6 +33,10 @@ public class VicsekViewParamPanel extends JPanel {
     //obstacle avoidance range panel
     JPanel obstacleAvoidanceRangePanel = new JPanel();
     JLabel obstacleAvoidanceRangeLabel = new JLabel();
+    
+    // obstacle size panel
+    JPanel obstacleSizePanel = new JPanel();
+    JLabel obstacleSizeLabel = new JLabel();
 
     JPanel boundaryModePanel = new JPanel();
     JLabel boundaryModeLabel = new JLabel();
@@ -67,6 +71,10 @@ public class VicsekViewParamPanel extends JPanel {
         obstacleAvoidanceRangePanel.add(obstacleAvoidanceRangeLabel);
         add(obstacleAvoidanceRangePanel);
 
+        obstacleSizeLabel.setText("Obstacle size : 30.0");
+        obstacleSizePanel.add(obstacleSizeLabel);
+        add(obstacleSizePanel);
+
         boundaryModeLabel.setText("Boundary mode : CLOSED_BOX");
         boundaryModePanel.add(boundaryModeLabel);
         add(boundaryModePanel);
@@ -90,6 +98,10 @@ public class VicsekViewParamPanel extends JPanel {
 
     public void updateVicsekObstacleAvoidanceRange(double range) {
         obstacleAvoidanceRangeLabel.setText("Obstacle detection range : " + range);
+    }
+
+    public void updateObstacleSize(double size) {
+        obstacleSizeLabel.setText("Obstacle size : " + size);
     }
 
     public void updateBoundaryMode(BoundaryMode mode) {

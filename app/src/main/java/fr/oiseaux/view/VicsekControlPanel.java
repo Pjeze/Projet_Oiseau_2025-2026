@@ -53,6 +53,10 @@ JPanel obstacleShapePanel = new JPanel();
 JLabel obstacleShapeLabel = new JLabel("Obstacle shape :");
 String[] shapes = {"None", "Cube", "Sphere", "Cone"};
 public JComboBox<String> obstacleShapeComboBox = new JComboBox<>(new String[]{"None", "Cube", "Sphere", "Cone"});
+// Obstacle size slider (for Cube and Sphere)
+JPanel obstacleSizePanel = new JPanel(new GridLayout(2,1));
+JLabel obstacleSizeLabel = new JLabel("Obstacle size :");
+public JSlider obstacleSizeSlider = new JSlider(JSlider.HORIZONTAL, 1, 100, 30);
 
     public VicsekControlPanel() {
         setLayout(new BorderLayout());
@@ -113,6 +117,16 @@ public JComboBox<String> obstacleShapeComboBox = new JComboBox<>(new String[]{"N
         obstacleShapePanel.add(obstacleShapeLabel);
         obstacleShapePanel.add(obstacleShapeComboBox);
         corePanel.add(obstacleShapePanel);
+
+        // obstacle size
+        obstacleSizeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+        obstacleSizePanel.add(obstacleSizeLabel);
+        obstacleSizeSlider.setMajorTickSpacing(10);
+        obstacleSizeSlider.setMinorTickSpacing(1);
+        obstacleSizeSlider.setPaintTicks(true);
+        obstacleSizeSlider.setPaintLabels(false);
+        obstacleSizePanel.add(obstacleSizeSlider);
+        corePanel.add(obstacleSizePanel);
 
         corePanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
 

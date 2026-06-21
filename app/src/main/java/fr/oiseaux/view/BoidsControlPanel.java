@@ -61,6 +61,11 @@ public class BoidsControlPanel extends JPanel {
     JPanel obstacleShapePanel = new JPanel();
     JLabel obstacleShapeLabel = new JLabel("Obstacle shape :");
     public JComboBox<String> obstacleShapeComboBox = new JComboBox<>(new String[]{"None", "Cube", "Sphere", "Cone"});
+    
+    // Obstacle size slider (for Cube and Sphere)
+    JPanel obstacleSizePanel = new JPanel(new GridLayout(2,1));
+    JLabel obstacleSizeLabel = new JLabel("Obstacle size :");
+    public JSlider obstacleSizeSlider = new JSlider(JSlider.HORIZONTAL, 1, 100, 30);
 
     public BoidsControlPanel() {
         setLayout(new BorderLayout());
@@ -143,6 +148,16 @@ obstacleShapePanel.add(obstacleShapeComboBox);
 
 // Add the panel to the main Boids control panel
         corePanel.add(obstacleShapePanel);
+
+    // obstacle size
+    obstacleSizeLabel.setHorizontalAlignment(SwingConstants.CENTER);
+    obstacleSizePanel.add(obstacleSizeLabel);
+    obstacleSizeSlider.setMajorTickSpacing(10);
+    obstacleSizeSlider.setMinorTickSpacing(1);
+    obstacleSizeSlider.setPaintTicks(true);
+    obstacleSizeSlider.setPaintLabels(false);
+    obstacleSizePanel.add(obstacleSizeSlider);
+    corePanel.add(obstacleSizePanel);
 
         corePanel.setBorder(BorderFactory.createEmptyBorder(8, 8, 8, 8));
 
