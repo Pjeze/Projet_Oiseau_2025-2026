@@ -262,7 +262,15 @@ public class VicsekModel implements BirdModel {
     Vector3D reference = Math.abs(direction.x()) < 0.9
         ? new Vector3D(1, 0, 0)
         : new Vector3D(0, 1, 0);
-    return Vector3D.cross(direction, reference).normalize();
+    Vector3D u = Vector3D.cross(direction, reference).normalize();
+
+    Vector3D v = Vector3D.cross(direction, u).normalize();
+
+    double randomAngle = random.nextDouble() * 2.0 *Math.PI;
+
+    Vector3D randomAxis = Vector3D.add(u.scale(Math.cos(randomAngle)), v.scale(Math.sin(randomAngle)));
+
+    return randomAxis.normalize();
   }
 
   private Vector3D rotateAroundAxis(Vector3D vector, Vector3D axis, double angle) {
