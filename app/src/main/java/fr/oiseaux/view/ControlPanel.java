@@ -11,6 +11,8 @@ import javax.swing.JButton;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
+import javax.swing.BoxLayout;
+import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
 
 import fr.oiseaux.model.BirdModel;
@@ -66,6 +68,9 @@ public class ControlPanel extends JPanel {
         //core characteristics panel
         JPanel coreCharacteristicsPanel = new JPanel();
 
+  //scroll pane for long controls
+  JScrollPane coreScrollPane;
+
           //characteristics bird number panel
           JPanel charBirdNumberPanel = new JPanel();
           JLabel charBirdNumberLabel = new JLabel("");
@@ -94,11 +99,17 @@ public class ControlPanel extends JPanel {
     changementPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
     characteristicsPanel.setBorder(BorderFactory.createEmptyBorder(6, 6, 6, 6));
 
-    //core panel
-    corePanel.setLayout(new BorderLayout());
+    //core panel — use a vertical BoxLayout so the view can grow and trigger scrolling
+    corePanel.setLayout(new BoxLayout(corePanel, BoxLayout.Y_AXIS));
 
-        //changement panel
-        changementPanel.setLayout(new BorderLayout());
+    //scroll pane for the main control area (always show vertical scrollbar)
+    coreScrollPane = new JScrollPane(corePanel,
+      JScrollPane.VERTICAL_SCROLLBAR_ALWAYS,
+      JScrollPane.HORIZONTAL_SCROLLBAR_NEVER);
+    coreScrollPane.getVerticalScrollBar().setUnitIncrement(16);
+
+      //changement panel
+      changementPanel.setLayout(new BorderLayout());
 
             //changement title panel
             changeTitleLabel.setHorizontalAlignment(SwingConstants.CENTER);
@@ -122,7 +133,7 @@ public class ControlPanel extends JPanel {
 
             changementPanel.add(coreChangementPanel, BorderLayout.CENTER);
 
-        corePanel.add(changementPanel, BorderLayout.NORTH);
+        corePanel.add(changementPanel);
 
         //characteristics panel
         characteristicsPanel.setLayout(new BorderLayout());
@@ -150,7 +161,7 @@ public class ControlPanel extends JPanel {
             characteristicsPanel.add(coreCharacteristicsPanel, BorderLayout.CENTER);
 
 
-        corePanel.add(characteristicsPanel, BorderLayout.CENTER);
+        corePanel.add(characteristicsPanel);
 
     //submit panel
     submitPanel.add(submitButton);
@@ -166,7 +177,7 @@ public class ControlPanel extends JPanel {
     //add to the board
     setLayout(new BorderLayout());
     add(titlePanel, BorderLayout.NORTH);
-    add(corePanel, BorderLayout.CENTER);
+    add(coreScrollPane, BorderLayout.CENTER);
     add(submitPanel, BorderLayout.SOUTH);
     
   }
